@@ -1,0 +1,289 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   Design System - Frontmakers
+   Bold, Modern, Tech-Focused Brand
+   ======================================== */
+
+:root {
+  /* Brand Colors */
+  --color-primary: #E10600;
+  --color-primary-dark: #B00000;
+  --color-primary-light: #FF4136;
+
+  /* Neutral Base */
+  --color-black: #111111;
+  --color-text: #1A1A1A;
+  --color-text-muted: #6B7280;
+
+  /* Backgrounds */
+  --color-background: #FFFFFF;
+  --color-background-alt: #F8F8F8;
+  --color-border: #E5E5E5;
+
+  /* Accent */
+  --color-accent-blue: #00C2FF;
+  --color-accent-blue-soft: #E6F9FF;
+
+  /* Status */
+  --color-success: #16A34A;
+  --color-error: #DC2626;
+  --color-warning: #F59E0B;
+
+  /* Legacy Support - mapped to new colors */
+  --bg-primary: var(--color-background);
+  --bg-secondary: var(--color-background-alt);
+  --text-primary: var(--color-text);
+  --text-secondary: var(--color-text-muted);
+  --text-inverse: #ffffff;
+  --border-light: var(--color-border);
+  --accent-primary: var(--color-primary);
+  --accent-hover: var(--color-primary-dark);
+  --accent-soft: #FFE8E6;
+  --success: var(--color-success);
+  --warning: var(--color-warning);
+  --error: var(--color-error);
+
+  /* Neutral scale */
+  --neutral-50: #F9FAFB;
+  --neutral-100: #F3F4F6;
+  --neutral-300: #D1D5DB;
+  --neutral-600: #6B7280;
+  --neutral-700: #4B5563;
+  --neutral-800: #1F2937;
+  --neutral-900: var(--color-black);
+  --border-dark: #374151;
+  --bg-dark: #0F0F0F;
+
+  /* Font */
+  --font-inter: 'Inter', sans-serif;
+}
+
+/* Dark Mode */
+.dark {
+  --color-background: #0F0F0F;
+  --color-background-alt: #1A1A1A;
+  --color-text: #F5F5F5;
+  --color-text-muted: #A1A1AA;
+  --color-border: #2A2A2A;
+  --color-black: #F5F5F5;
+  
+  /* Update legacy mappings */
+  --bg-primary: var(--color-background);
+  --bg-secondary: var(--color-background-alt);
+  --text-primary: var(--color-text);
+  --text-secondary: var(--color-text-muted);
+  --border-light: var(--color-border);
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   Custom Utilities
+   ======================================== */
+
+@layer utilities {
+  .container-grid {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ========================================
+   Component Patterns
+   ======================================== */
+
+@layer components {
+  /* Botões */
+  .btn-primary {
+    @apply bg-[var(--color-primary)] text-white px-6 py-3 rounded-lg font-semibold 
+           transition-all duration-200 hover:bg-[var(--color-primary-dark)] 
+           focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] 
+           focus:ring-opacity-50 focus:ring-offset-2 
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-[var(--color-primary)] border-2 border-[var(--color-primary)] 
+           px-6 py-3 rounded-lg font-semibold transition-all duration-200 
+           hover:bg-[var(--color-primary)] hover:bg-opacity-5 
+           focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] 
+           focus:ring-opacity-50 focus:ring-offset-2;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-[var(--color-text)] px-6 py-3 rounded-lg 
+           font-medium transition-colors duration-200 
+           hover:bg-[var(--color-background-alt)];
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-[var(--color-background)] border border-[var(--color-border)] 
+           rounded-xl p-6 transition-all duration-200 
+           hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)];
+  }
+
+  /* Inputs */
+  .input {
+    @apply w-full px-4 py-2.5 border border-[var(--color-border)] rounded-lg 
+           bg-[var(--color-background)] text-[var(--color-text)] 
+           focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] 
+           focus:ring-opacity-30 focus:border-transparent transition-all;
+  }
+
+  /* Labels */
+  .label {
+    @apply block text-sm font-semibold text-[var(--color-text)] mb-2;
+  }
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+}
+
+p {
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+/* ========================================
+   Markdown Content Styles
+   ======================================== */
+
+.prose {
+  @apply max-w-3xl mx-auto;
+}
+
+.prose h2 {
+  @apply mt-12 mb-4;
+}
+
+.prose h3 {
+  @apply mt-8 mb-3;
+}
+
+.prose p {
+  @apply mb-6 text-lg leading-relaxed;
+}
+
+.prose ul,
+.prose ol {
+  @apply mb-6 ml-6 space-y-2;
+}
+
+.prose li {
+  @apply text-secondary;
+}
+
+.prose code {
+  @apply bg-neutral-100 text-[var(--color-primary)] px-1.5 py-0.5 rounded text-sm font-medium;
+}
+
+.prose pre {
+  @apply bg-neutral-900 text-neutral-50 p-6 rounded-xl overflow-x-auto mb-6;
+}
+
+.prose pre code {
+  @apply bg-transparent text-neutral-50 p-0;
+}
+
+.prose a {
+  @apply text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] 
+         underline underline-offset-2 transition-colors;
+}
+
+.prose strong {
+  @apply text-[var(--color-text)] font-bold;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-[var(--color-primary)] pl-6 italic 
+         text-[var(--color-text-muted)] my-6;
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+
+@media print {
+  nav,
+  footer,
+  .ad-banner {
+    display: none !important;
+  }
+}

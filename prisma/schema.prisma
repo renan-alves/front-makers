@@ -1,0 +1,90 @@
+// Prisma Schema for Frontmakers
+// Database: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model
+// Prepared for future authentication and role-based access
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  role      UserRole  @default(USER)
+  articles  Article[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([email])
+}
+
+enum UserRole {
+  ADMIN
+  AUTHOR
+  USER
+}
+
+// Article Model
+// Main content model for published articles
+model Article {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  content     String        @db.Text
+  excerpt     String
+  coverImage  String?
+  locale      String        @default("en")
+  status      ArticleStatus @default(DRAFT)
+  category    String
+  readTime    Int           // Reading time in minutes
+  tags        String[]      // Array of tags
+  author      User          @relation(fields: [authorId], references: [id])
+  authorId    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  publishedAt DateTime?
+
+  @@index([slug])
+  @@index([locale])
+  @@index([status])
+  @@index([authorId])
+  @@index([publishedAt])
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// Article Submission Model
+// For community-submitted articles awaiting review
+model ArticleSubmission {
+  id          String           @id @default(cuid())
+  title       String
+  content     String           @db.Text
+  authorName  String
+  authorEmail String
+  locale      String           @default("en")
+  status      SubmissionStatus @default(PENDING)
+  category    String?
+  tags        String[]         @default([])
+  notes       String?          // Admin notes
+  createdAt   DateTime         @default(now())
+  reviewedAt  DateTime?
+
+  @@index([status])
+  @@index([authorEmail])
+  @@index([createdAt])
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}

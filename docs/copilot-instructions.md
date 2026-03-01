@@ -21,11 +21,39 @@
 
 ## Project Overview
 
+## Decision Sync Workflow
+
+The file `docs/copilot-instructions.md` is the operational source of truth for implementation rules.
+
+Whenever a new project decision is made in chat (design system, responsiveness, architecture, naming, UX constraints, or coding standards), it must be reflected here in the same work session.
+
+Required workflow:
+
+1. Implement the change in code (if applicable).
+2. Update this instructions file with the final rule.
+3. Prefer adding rules in existing relevant sections (Design System, Component Guidelines, Performance Rules, etc.).
+4. Keep rules concise, actionable, and non-contradictory.
+
+If a new decision conflicts with an older rule, update the older rule and keep only the newest canonical version.
+
+### Open Access Policy (Mandatory)
+
+Frontmakers is currently a **100% free and open platform**.
+
+While architecture can stay extensible for future monetization, no premium feature can be active in product behavior or UI.
+
+Mandatory constraints:
+
+1. Do not implement plan-based access logic.
+2. Do not show premium/pro/upgrade/pricing UI.
+3. Do not add subscription/payment integrations.
+4. All users can publish articles, create threads, reply, and edit their own content.
+
 **Frontmakers** is a modern platform for frontend developers that provides:
 
 - **Developer Tools** - CSS utility generators (Box Shadow, Gradients, Unit Converters)
 - **Technical Articles** - Educational content for frontend development
-- **Future SaaS** - Subscription features (not implemented yet)
+- **Open Community Platform** - All publishing and discussion features are free
 - **Google AdSense** - Monetization infrastructure (already supported)
 
 ### Brand Personality
@@ -349,6 +377,77 @@ p {
 4. **Grid System**: Use CSS Grid or Tailwind grid utilities
 5. **Clean Hierarchy**: Clear visual separation between content types
 
+### Responsive Standards (Mandatory)
+
+Follow these rules in all pages and components:
+
+1. **Start Mobile-First** - Default to single-column layouts without breakpoints.
+2. **Scale Progressively** - Add `md:` and `lg:` only when content needs it.
+3. **Use Flexible Widths** - Prefer `w-full` + `max-w-*`/`container-grid` over fixed widths.
+4. **Prefer Predictable Grids** - Use patterns like `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`.
+5. **Avoid Horizontal Breakage** - Wrap wide blocks in `overflow-x-auto` and, if needed, `min-w-*`.
+6. **Responsive Typography** - Scale key text with responsive classes (`text-base md:text-xl`) or `clamp`.
+
+### Responsive Patterns
+
+```tsx
+// Mobile-first card grid
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {items.map((item) => (
+    <Card key={item.id} />
+  ))}
+</div>
+
+// Safe wrapper for wide content (code, table, preview)
+<div className="overflow-x-auto rounded-lg border border-light">
+  <div className="min-w-[960px]">
+    <WideContent />
+  </div>
+</div>
+```
+
+### Section Padding Rule (Mandatory)
+
+For page sections, use centralized section padding tokens:
+
+```css
+--section-padding-sm: 12px;
+--section-padding-md: 24px;
+--section-padding-lg: 40px;
+--section-padding: var(--section-padding-sm);
+
+@media (min-width: 768px) {
+  --section-padding: var(--section-padding-md);
+}
+
+@media (min-width: 1200px) {
+  --section-padding: var(--section-padding-lg);
+}
+```
+
+Use pattern:
+
+```tsx
+<section className="section-padding">
+  <div className="container-grid">...</div>
+</section>
+```
+
+Do not combine `section-padding` and `container-grid` on the same element.
+
+### Units Policy (`rem` vs `px`)
+
+Use a mixed strategy with clear responsibilities:
+
+1. **Use `rem`** for scalable dimensions:
+   - Typography sizes
+   - Section/layout spacing
+   - Component dimensions that should follow user font settings
+2. **Use `px`** for precision details:
+   - Borders and dividers
+   - Hairlines and fine icon details
+   - Shadow offsets and blur values
+
 ---
 
 ## Component Guidelines
@@ -437,10 +536,20 @@ export default function Button({
 - ✅ Document component purpose with JSDoc
 - ✅ Provide default values for optional props
 - ✅ Handle loading and error states
+- ✅ Add `loading.tsx` with skeletons for data-fetching routes (use `skeleton` utility or `Skeleton` component)
+- ✅ Keep skeleton layouts aligned with the latest page layout changes
 - ✅ Make components reusable and flexible
 - ❌ Don't create one-off components for simple markup
 - ❌ Don't mix business logic with presentation
 - ❌ Don't use inline styles (use Tailwind classes)
+
+### Auth UI (Project Standard)
+
+- Signup requires display name, email, avatar photo, state, country, newsletter opt-in, password + confirm password.
+- Password must be strong: at least 8 chars, uppercase, lowercase, number, symbol.
+- Show consent copy: user agrees to Privacy Policy and Terms of Use (coming soon).
+- Login uses email + password.
+- Social login buttons for Google, LinkedIn, GitHub (visual only until OAuth is implemented).
 
 ---
 
@@ -530,6 +639,40 @@ When adding new tools:
 ---
 
 ## Articles System
+
+### Editorial-First Discussion Model (Mandatory)
+
+Product rules for articles and community discussions:
+
+1. Home page is the article feed (editorial-first).
+2. Article reading experience is always the visual priority.
+3. Discussions are structured as threads, not linear comments.
+4. Each thread has its own URL page and can contain replies + voting.
+5. Discussion UI should feel like an extension of the article, not a competing forum layout.
+
+### Page Layout Rules
+
+#### Article Page
+
+- Keep article content in a centered, comfortable reading column (`~720px`).
+- Show clear hierarchy: title, author, date, reading time, content.
+- No competing sidebar near main content.
+- After content, show a clearly separated discussion block.
+- Use tabs pattern: `Artigo` and `Discussões (X)`.
+
+#### Discussion List (inside Article Page)
+
+- Thread item must include: title, author, date, replies count, votes, preview.
+- Provide CTA: `Iniciar nova discussão`.
+- Provide sorting options: relevância, mais recentes, mais votadas.
+
+#### Thread Page
+
+- Must have standalone route.
+- Show thread question at top.
+- Show replies below.
+- Include voting controls.
+- Support `Melhor resposta` state.
 
 ### Article Structure
 
@@ -796,10 +939,9 @@ The architecture is prepared for:
    - OAuth providers
    - Protected routes
 
-2. **Subscription Plans**
-   - Tiered pricing
-   - Stripe integration
-   - Premium tools
+2. **Monetization (Future, if needed)**
+  - Keep platform features open by default
+  - Non-disruptive monetization experiments only when explicitly approved
 
 3. **User Dashboard**
    - Saved tools
@@ -881,7 +1023,9 @@ Before committing:
 - [ ] Component is properly documented
 - [ ] No console.log statements
 - [ ] Follows naming conventions
-- [ ] Responsive on mobile
+- [ ] Mobile-first layout validated (single-column base)
+- [ ] Breakpoints added only where needed (`md`, `lg`)
+- [ ] No horizontal overflow on mobile (code/tables/previews checked)
 - [ ] Accessible (ARIA labels, keyboard nav)
 - [ ] SEO metadata included
 - [ ] AdSense compatibility maintained

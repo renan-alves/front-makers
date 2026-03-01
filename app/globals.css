@@ -1,3 +1,5 @@
+@import '../styles/design-system.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,74 +9,62 @@
    Bold, Modern, Tech-Focused Brand
    ======================================== */
 
+/* 
+   Comprehensive design system imported from styles/design-system.css
+   This includes:
+   - Primary & semantic color variables
+   - Spacing scale (4px to 128px)
+   - Typography variables
+   - Shadow system
+   - Border radius scale
+   - Transitions & animations
+   - Z-index scale
+   - Utility classes for common patterns
+   - Dark mode support (prefers-color-scheme)
+   - Accessibility utilities
+   - Print styles
+*/
+
 :root {
-  /* Brand Colors */
-  --color-primary: #E10600;
-  --color-primary-dark: #B00000;
-  --color-primary-light: #FF4136;
-
-  /* Neutral Base */
-  --color-black: #111111;
-  --color-text: #1A1A1A;
-  --color-text-muted: #6B7280;
-
-  /* Backgrounds */
-  --color-background: #FFFFFF;
-  --color-background-alt: #F8F8F8;
-  --color-border: #E5E5E5;
-
-  /* Accent */
-  --color-accent-blue: #00C2FF;
-  --color-accent-blue-soft: #E6F9FF;
-
-  /* Status */
-  --color-success: #16A34A;
-  --color-error: #DC2626;
-  --color-warning: #F59E0B;
-
+  /* Typography */
+  --font-inter: 'Inter', sans-serif;
+  
   /* Legacy Support - mapped to new colors */
-  --bg-primary: var(--color-background);
-  --bg-secondary: var(--color-background-alt);
+  --bg-primary: var(--color-bg-primary);
+  --bg-secondary: var(--color-bg-secondary);
   --text-primary: var(--color-text);
-  --text-secondary: var(--color-text-muted);
+  --text-secondary: var(--color-text-secondary);
   --text-inverse: #ffffff;
   --border-light: var(--color-border);
   --accent-primary: var(--color-primary);
   --accent-hover: var(--color-primary-dark);
   --accent-soft: #FFE8E6;
-  --success: var(--color-success);
-  --warning: var(--color-warning);
-  --error: var(--color-error);
 
   /* Neutral scale */
   --neutral-50: #F9FAFB;
   --neutral-100: #F3F4F6;
   --neutral-300: #D1D5DB;
-  --neutral-600: #6B7280;
+  --neutral-600: var(--color-text-secondary);
   --neutral-700: #4B5563;
   --neutral-800: #1F2937;
-  --neutral-900: var(--color-black);
+  --neutral-900: var(--color-text);
   --border-dark: #374151;
   --bg-dark: #0F0F0F;
-
-  /* Font */
-  --font-inter: 'Inter', sans-serif;
 }
 
-/* Dark Mode */
+/* Dark Mode - Legacy support (modern approach via prefers-color-scheme in design-system.css) */
 .dark {
-  --color-background: #0F0F0F;
-  --color-background-alt: #1A1A1A;
+  --color-bg-primary: #0F0F0F;
+  --color-bg-secondary: #1A1A1A;
   --color-text: #F5F5F5;
-  --color-text-muted: #A1A1AA;
+  --color-text-secondary: #A1A1AA;
   --color-border: #2A2A2A;
-  --color-black: #F5F5F5;
   
   /* Update legacy mappings */
-  --bg-primary: var(--color-background);
-  --bg-secondary: var(--color-background-alt);
+  --bg-primary: var(--color-bg-primary);
+  --bg-secondary: var(--color-bg-secondary);
   --text-primary: var(--color-text);
-  --text-secondary: var(--color-text-muted);
+  --text-secondary: var(--color-text-secondary);
   --border-light: var(--color-border);
 }
 

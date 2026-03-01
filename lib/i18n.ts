@@ -2,39 +2,41 @@
  * Internationalization Configuration
  * 
  * Centralized i18n setup for Frontmakers.
- * Currently supports English only.
+ * Supports English and PT-BR.
  * Prepared for future multilingual expansion.
  */
 
-export const locales = ['en'] as const;
+export const locales = ['en', 'pt-br'] as const;
 export const defaultLocale = 'en' as const;
 
-export type Locale = (typeof locales)[number];
+// Explicit Locale type for strong type checking
+export type Locale = 'en' | 'pt-br';
 
 /**
  * Locale configurations
  */
 export const localeConfig = {
   en: {
-    code: 'en',
+    code: 'en' as const,
     name: 'English',
-    flag: '🇺🇸',
-    dir: 'ltr',
+    flag: 'UK',
+    dir: 'ltr' as const,
   },
-  // Future locales (commented out until implemented):
-  // pt: {
-  //   code: 'pt',
-  //   name: 'Português',
-  //   flag: '🇧🇷',
-  //   dir: 'ltr',
-  // },
+  'pt-br': {
+    code: 'pt-br' as const,
+    name: 'Portugues (BR)',
+    flag: 'BR',
+    dir: 'ltr' as const,
+  },
   // es: {
   //   code: 'es',
   //   name: 'Español',
   //   flag: '🇪🇸',
   //   dir: 'ltr',
   // },
-} as const;
+} as const satisfies Record<Locale, { code: string; name: string; flag: string; dir: 'ltr' | 'rtl' }>;
+
+export type LocaleConfig = typeof localeConfig;
 
 /**
  * Check if locale is valid

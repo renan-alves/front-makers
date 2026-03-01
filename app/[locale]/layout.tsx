@@ -1,40 +1,47 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { locales, type Locale, localeConfig } from '@/lib/i18n';
+import { localeConfig } from '@/lib/i18n';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
+// Define the locale segment type explicitly for Next.js
+type SegmentLocale = 'en' | 'pt-br';
+
 // Generate static params for all supported locales
-export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+export function generateStaticParams(): Array<{ locale: SegmentLocale }> {
+  return [{ locale: 'en' }, { locale: 'pt-br' }];
 }
 
 // Generate metadata based on locale
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  
-  if (!locales.includes(locale)) {
+  const typedLocale = locale as SegmentLocale;
+  const config = localeConfig[typedLocale];
+  const isPtBr = typedLocale === 'pt-br';
+
+  if (!config) {
     notFound();
   }
-
-  const config = localeConfig[locale];
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://frontmakers.com'),
     title: {
-      default: 'Frontmakers - Tools and Articles for Frontend Developers',
+      default: isPtBr
+        ? 'Frontmakers - Artigos para desenvolvedores frontend'
+        : 'Frontmakers - Articles for Frontend Developers',
       template: '%s | Frontmakers',
     },
     description:
-      'Complete platform with practical tools, technical articles and resources for modern frontend developers.',
+      isPtBr
+        ? 'Plataforma com artigos tecnicos e recursos para desenvolvedores frontend modernos.'
+        : 'Complete platform with technical articles and resources for modern frontend developers.',
     keywords: [
       'frontend',
       'web development',
-      'tools',
       'CSS',
       'JavaScript',
       'TypeScript',
@@ -58,17 +65,25 @@ export async function generateMetadata({
     openGraph: {
       type: 'website',
       locale: config.code,
-      url: `https://frontmakers.com/${locale}`,
+      url: `https://frontmakers.com/${typedLocale}`,
       siteName: 'Frontmakers',
-      title: 'Frontmakers - Tools and Articles for Frontend Developers',
+      title: isPtBr
+        ? 'Frontmakers - Artigos para desenvolvedores frontend'
+        : 'Frontmakers - Articles for Frontend Developers',
       description:
-        'Complete platform with practical tools, technical articles and resources for modern frontend developers.',
+        isPtBr
+          ? 'Plataforma com artigos tecnicos e recursos para desenvolvedores frontend modernos.'
+          : 'Complete platform with technical articles and resources for modern frontend developers.',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Frontmakers - Tools and Articles for Frontend Developers',
+      title: isPtBr
+        ? 'Frontmakers - Artigos para desenvolvedores frontend'
+        : 'Frontmakers - Articles for Frontend Developers',
       description:
-        'Complete platform with practical tools, technical articles and resources for modern frontend developers.',
+        isPtBr
+          ? 'Plataforma com artigos tecnicos e recursos para desenvolvedores frontend modernos.'
+          : 'Complete platform with technical articles and resources for modern frontend developers.',
       creator: '@frontmakers',
     },
   };
@@ -77,26 +92,25 @@ export async function generateMetadata({
 export default async function LocaleLayout({
   children,
   params,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
-}) {
+  params: Promise<{ locale: string }>;
+}>) {
   const { locale } = await params;
+  const typedLocale = locale as SegmentLocale;
+  const config = localeConfig[typedLocale];
 
-  // Validate locale
-  if (!locales.includes(locale)) {
+  if (!config) {
     notFound();
   }
 
-  const config = localeConfig[locale];
-
   return (
     <>
-      <Header locale={locale} />
+      <Header locale={typedLocale} />
       <main className="min-h-screen" lang={config.code} dir={config.dir}>
         {children}
       </main>
-      <Footer locale={locale} />
+      <Footer locale={typedLocale} />
     </>
   );
 }

@@ -13,10 +13,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const routes = [
       '',
       '/articles',
-      '/tools',
-      '/tools/box-shadow',
-      '/tools/gradient',
-      '/tools/px-rem',
       '/submit',
     ].map((route) => ({
       url: `${baseUrl}/${locale}${route}`,

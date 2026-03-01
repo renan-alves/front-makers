@@ -1,23 +1,24 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import AdBanner from '@/components/ads/AdBanner';
+import { getPublishedArticles } from '@/lib/articles';
+import HomeFeed from '@/components/home/HomeFeed';
+
+type FeedFilter = 'recent' | 'trending' | 'most-read';
 
 interface Props {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ filter?: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
 
   return {
-    title:
-      locale === 'en'
-        ? 'Frontmakers - Tools and Articles for Frontend Developers'
-        : 'Frontmakers - Tools and Articles for Frontend Developers',
+    title: locale === 'pt-br' ? 'Artigos para desenvolvedores' : 'Articles for Developers',
     description:
-      locale === 'en'
-        ? 'Complete platform with practical tools, technical articles and essential resources for modern frontend developers.'
-        : 'Complete platform with practical tools, technical articles and essential resources for modern frontend developers.',
+      locale === 'pt-br'
+        ? 'Plataforma aberta onde desenvolvedores compartilham artigos praticos e aprofundados sobre qualquer tema.'
+        : 'Open publishing platform where developers share practical and in-depth articles on any topic.',
   };
 }
 
@@ -25,217 +26,173 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  * Home Page Component
  * Main landing page of Frontmakers
  */
-export default async function Home({ params }: Props) {
+export default async function Home({ params, searchParams }: Props) {
   const { locale } = await params;
+  const { filter } = await searchParams;
+  const t =
+    locale === 'pt-br'
+      ? {
+          heroTitle: 'Artigos escritos por desenvolvedores, para desenvolvedores.',
+          heroSubtitle:
+            'Uma plataforma editorial aberta onde qualquer dev pode escrever sobre qualquer tema e construir discussoes estruturadas em torno de ideias.',
+          filters: {
+            recent: 'Recentes',
+            trending: 'Em alta',
+            mostRead: 'Mais lidos',
+          },
+          emptyTitle: 'Sem artigos ainda',
+          emptySubtitle: 'As publicacoes comecam em breve.',
+          meta: {
+            draft: 'Rascunho',
+            minRead: 'min de leitura',
+            reads: 'leituras',
+          },
+          sidebarLabel: 'Contribua',
+          sidebarTitle: 'Envie seu artigo',
+          sidebarBody:
+            'Compartilhe aprendizados praticos com a comunidade e ajude outros desenvolvedores a aprender mais rapido.',
+          sidebarCta: 'Enviar artigo',
+        }
+      : {
+          heroTitle: 'Articles written by developers, for developers.',
+          heroSubtitle:
+            'An open editorial platform where any dev can write about any topic and build structured discussions around ideas.',
+          filters: {
+            recent: 'Recent',
+            trending: 'Trending',
+            mostRead: 'Most read',
+          },
+          emptyTitle: 'No articles yet',
+          emptySubtitle: 'Publishing starts soon.',
+          meta: {
+            draft: 'Draft',
+            minRead: 'min read',
+            reads: 'reads',
+          },
+          sidebarLabel: 'Contribute',
+          sidebarTitle: 'Submit your article',
+          sidebarBody:
+            'Share practical insights with the community and help other developers learn faster.',
+          sidebarCta: 'Submit Article',
+        };
+  const selectedFilter: FeedFilter =
+    filter === 'trending' || filter === 'most-read' ? filter : 'recent';
 
-  const translations = {
-    en: {
-      title: 'Tools and Resources for Frontend Developers',
-      subtitle:
-        'Accelerate your workflow with practical tools, technical articles and essential resources for modern frontend development.',
-      explorTools: 'Explore Tools',
-      readArticles: 'Read Articles',
-      featuredTools: 'Featured Tools',
-      freeTools: 'Free and ready-to-use tools. No registration required.',
-      viewAllTools: 'View all tools',
-      learnModern: 'Learn Modern Frontend',
-      practicalArticles:
-        'Practical articles about CSS, JavaScript, TypeScript, React and Next.js written by developers for developers.',
-      exploreArticles: 'Explore Articles',
-      fast: 'Fast and Practical',
-      fastDesc:
-        'Tools that work directly in the browser. No installation, no complications.',
-      quality: 'Focused on Quality',
-      qualityDesc:
-        'In-depth technical content and tools well-designed for professional use.',
-      free: '100% Free',
-      freeDesc:
-        'Full access to all tools and articles. No paywall, no mandatory registration.',
-      useTool: 'Use tool',
-    },
-    pt: {
-      title: 'Tools and Resources for Frontend Developers',
-      subtitle:
-        'Accelerate your workflow with practical tools, technical articles and essential resources for modern frontend development.',
-      explorTools: 'Explore Tools',
-      readArticles: 'Read Articles',
-      featuredTools: 'Featured Tools',
-      freeTools: 'Free and ready-to-use tools. No registration required.',
-      viewAllTools: 'View all tools',
-      learnModern: 'Learn Modern Frontend',
-      practicalArticles:
-        'Practical articles about CSS, JavaScript, TypeScript, React and Next.js written by developers for developers.',
-      exploreArticles: 'Explore Articles',
-      fast: 'Fast and Practical',
-      fastDesc:
-        'Tools that work directly in the browser. No installation, no complications.',
-      quality: 'Focused on Quality',
-      qualityDesc:
-        'In-depth technical content and tools well-designed for professional use.',
-      free: '100% Free',
-      freeDesc:
-        'Full access to all tools and articles. No paywall, no mandatory registration.',
-      useTool: 'Use tool',
-    },
-  };
+  const articles = await getPublishedArticles(locale);
 
-  const t = translations[locale as keyof typeof translations] || translations.en;
+  const scoredArticles = articles.map((article, index) => {
+    const baseScore = article.readTime * 3 + (article.tags?.length ?? 0) * 5;
+    const deterministicBoost = (index + article.slug.length) % 17;
+    const popularityScore = baseScore + deterministicBoost;
+    const reads = 1000 + popularityScore * 42;
 
-  // Featured tools
-  const featuredTools = [
-    {
-      title: 'Box Shadow Generator',
-      description:
-        'Create perfect CSS shadows with real-time preview and copy-ready code.',
-      href: `/${locale}/tools/box-shadow`,
-      icon: '🎨',
-    },
-    {
-      title: 'Gradient Generator',
-      description:
-        'Generate beautiful CSS gradients by choosing colors and directions with instant visualization.',
-      href: `/${locale}/tools/gradient`,
-      icon: '🌈',
-    },
-    {
-      title: 'PX → REM Converter',
-      description:
-        'Convert pixels to REM easily and create responsive and accessible designs.',
-      href: `/${locale}/tools/px-rem`,
-      icon: '📏',
-    },
-  ];
+    return {
+      ...article,
+      popularityScore,
+      reads,
+    };
+  });
+
+  const sortedArticles = [...scoredArticles].sort((a, b) => {
+    if (selectedFilter === 'most-read') {
+      return b.reads - a.reads;
+    }
+
+    if (selectedFilter === 'trending') {
+      return b.popularityScore - a.popularityScore;
+    }
+
+    return new Date(b.publishedAt ?? 0).getTime() - new Date(a.publishedAt ?? 0).getTime();
+  });
 
   return (
-    <div className="w-full">
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
-        {/* Subtle background accent */}
-        <div className="absolute inset-0 bg-gradient-to-b from-neutral-50 via-transparent to-transparent"></div>
-
-        <div className="container-grid relative">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <h1 className="text-balance">
-              {t.title.split(' for ')[0]} for
-              <span className="text-[var(--color-primary)]">
-                {' '}
-                {t.title.split(' for ')[1]}
-              </span>
-            </h1>
-
-            <p className="text-xl md:text-2xl text-muted max-w-3xl mx-auto leading-relaxed">
-              {t.subtitle}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-              <Link href={`/${locale}/tools`} className="btn-primary">
-                {t.explorTools}
-              </Link>
-              <Link href={`/${locale}/articles`} className="btn-secondary">
-                {t.readArticles}
-              </Link>
-            </div>
+    <HomeFeed
+      selectedFilter={selectedFilter}
+      labels={{
+        heroTitle: t.heroTitle,
+        heroSubtitle: t.heroSubtitle,
+        filters: t.filters,
+      }}
+      list={
+        sortedArticles.length === 0 ? (
+          <div className="card text-center">
+            <h2 className="text-2xl mb-2">{t.emptyTitle}</h2>
+            <p className="text-secondary">{t.emptySubtitle}</p>
           </div>
-        </div>
-      </section>
-
-      {/* Ad Banner after Hero */}
-      <section className="container-grid py-8">
-        <AdBanner slot="hero" />
-      </section>
-
-      {/* Tools Section */}
-      <section className="container-grid py-20">
-        <div className="text-center mb-16">
-          <h2 className="mb-4">{t.featuredTools}</h2>
-          <p className="text-lg text-secondary max-w-2xl mx-auto">
-            {t.freeTools}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {featuredTools.map((tool) => (
+        ) : (
+          sortedArticles.map((article) => (
             <Link
-              key={tool.href}
-              href={tool.href}
+              key={article.slug}
+              href={`/${locale}/articles/${article.slug}`}
               className="card group"
             >
-              {/* Icon */}
-              <div className="text-5xl mb-4 transition-transform group-hover:scale-110">
-                {tool.icon}
-              </div>
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-secondary">
+                  <span>{article.author.name}</span>
+                  <span>•</span>
+                  <time dateTime={article.publishedAt?.toISOString() ?? ''}>
+                    {article.publishedAt
+                      ? article.publishedAt.toLocaleDateString(
+                          locale === 'pt-br' ? 'pt-BR' : 'en-US',
+                          {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          }
+                        )
+                      : t.meta.draft}
+                  </time>
+                  <span>•</span>
+                  <span>
+                    {article.readTime} {t.meta.minRead}
+                  </span>
+                  <span>•</span>
+                  <span>
+                    {article.reads.toLocaleString()} {t.meta.reads}
+                  </span>
+                </div>
 
-              {/* Content */}
-              <h3 className="text-xl font-bold mb-3 group-hover:text-[var(--color-primary)] transition-colors">
-                {tool.title}
-              </h3>
-              <p className="text-secondary">{tool.description}</p>
+                <h2 className="text-2xl font-bold group-hover:text-[var(--color-primary)] transition-colors">
+                  {article.title}
+                </h2>
 
-              {/* Arrow indicator */}
-              <div className="mt-4 text-[var(--color-primary)] font-semibold flex items-center gap-2">
-                {t.useTool}
-                <span className="transition-transform group-hover:translate-x-1">
-                  →
-                </span>
+                <p className="text-secondary text-lg leading-relaxed">
+                  {article.excerpt}
+                </p>
+
+                {article.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {article.tags.slice(0, 4).map((tag) => (
+                      <span
+                        key={`${article.slug}-${tag}`}
+                        className="px-2.5 py-1 text-xs rounded-full bg-[var(--color-accent-blue-soft)] text-accent-blue border border-[var(--color-accent-blue)] border-opacity-30"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </Link>
-          ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <Link
-            href={`/${locale}/tools`}
-            className="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] font-semibold transition-colors"
-          >
-            {t.viewAllTools}
-            <span>→</span>
-          </Link>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-secondary py-20">
-        <div className="container-grid">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h2>{t.learnModern}</h2>
-            <p className="text-lg text-secondary">
-              {t.practicalArticles}
-            </p>
-            <Link href={`/${locale}/articles`} className="btn-primary inline-block">
-              {t.exploreArticles}
+          ))
+        )
+      }
+      aside={
+        <aside className="lg:sticky lg:top-24">
+          <div className="card space-y-4">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-wide text-secondary">
+                {t.sidebarLabel}
+              </span>
+              <h3 className="text-2xl font-bold mt-2">{t.sidebarTitle}</h3>
+            </div>
+            <p className="text-secondary">{t.sidebarBody}</p>
+            <Link href={`/${locale}/submit`} className="btn-primary text-center">
+              {t.sidebarCta}
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="container-grid py-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="text-center space-y-3">
-            <div className="text-4xl mb-4">⚡</div>
-            <h3 className="text-xl font-bold">{t.fast}</h3>
-            <p className="text-secondary">
-              {t.fastDesc}
-            </p>
-          </div>
-
-          <div className="text-center space-y-3">
-            <div className="text-4xl mb-4">🎯</div>
-            <h3 className="text-xl font-bold">{t.quality}</h3>
-            <p className="text-secondary">
-              {t.qualityDesc}
-            </p>
-          </div>
-
-          <div className="text-center space-y-3">
-            <div className="text-4xl mb-4">🆓</div>
-            <h3 className="text-xl font-bold">{t.free}</h3>
-            <p className="text-secondary">
-              {t.freeDesc}
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
+        </aside>
+      }
+    />
   );
 }

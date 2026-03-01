@@ -1,0 +1,437 @@
+{
+  "design_tokens": {
+    "version": "1.0.0",
+    "last_updated": "2024",
+    "description": "Complete design tokens specification for Frontmakers brand",
+    "units_policy": {
+      "scalable_unit": "rem",
+      "precision_unit": "px",
+      "use_rem_for": [
+        "typography sizes",
+        "section/layout spacing",
+        "component dimensions that should scale with user font settings"
+      ],
+      "use_px_for": [
+        "borders and dividers",
+        "hairlines and fine icon details",
+        "shadow offsets and blur values"
+      ]
+    },
+    
+    "colors": {
+      "primary": {
+        "description": "Tech Red - Main brand color, primary CTAs",
+        "base": "#E10600",
+        "dark": "#B80500",
+        "light": "#FA4C42",
+        "rgb": "225, 6, 0",
+        "usage": ["buttons", "links", "highlights", "badges"]
+      },
+      "accent": {
+        "blue": {
+          "description": "Tech Blue - Secondary accent, information",
+          "base": "#00C2FF",
+          "dark": "#0099CC",
+          "light": "#50DDFF",
+          "soft": "#F0F9FF",
+          "rgb": "0, 194, 255",
+          "usage": ["secondary buttons", "focus states", "info badges"]
+        },
+        "orange": {
+          "description": "Tech Orange - Tertiary accent, highlights",
+          "base": "#FF7A3D",
+          "dark": "#E85F24",
+          "light": "#FFB399",
+          "soft": "#FFF5E6",
+          "rgb": "255, 122, 61",
+          "usage": ["accents", "warnings", "highlights"]
+        }
+      },
+      "neutral": {
+        "charcoal": {
+          "description": "Primary text and dark backgrounds",
+          "base": "#1A1A1A",
+          "rgb": "26, 26, 26",
+          "usage": ["text", "headings", "dark backgrounds"]
+        },
+        "gray": {
+          "description": "Secondary text and muted states",
+          "base": "#999999",
+          "rgb": "153, 153, 153",
+          "usage": ["secondary text", "muted content", "disabled states"]
+        }
+      },
+      "background": {
+        "primary": {
+          "description": "Light mode primary background",
+          "light": "#FFFFFF",
+          "dark": "#0F0F0F",
+          "usage": ["page background", "card backgrounds"]
+        },
+        "secondary": {
+          "description": "Light mode secondary background",
+          "light": "#F5F5F5",
+          "dark": "#1A1A1A",
+          "usage": ["sections", "alternate backgrounds"]
+        },
+        "tertiary": {
+          "description": "Light mode tertiary background",
+          "light": "#EFEFEF",
+          "dark": "#252525",
+          "usage": ["buttons", "hover states"]
+        }
+      },
+      "border": {
+        "light": {
+          "description": "Light borders and dividers",
+          "light": "#E8E8E8",
+          "dark": "#333333",
+          "usage": ["borders", "dividers", "subtle boundaries"]
+        },
+        "dark": {
+          "description": "Dark/prominent borders",
+          "light": "#D0D0D0",
+          "dark": "#555555",
+          "usage": ["form borders", "prominent dividers"]
+        }
+      },
+      "semantic": {
+        "success": {
+          "description": "Positive outcomes and confirmations",
+          "base": "#10B981",
+          "soft": "#ECFDF5",
+          "usage": ["success messages", "checkmarks", "confirmations"]
+        },
+        "warning": {
+          "description": "Caution and attention needed",
+          "base": "#F59E0B",
+          "soft": "#FFFBEB",
+          "usage": ["warnings", "important notices", "alerts"]
+        },
+        "error": {
+          "description": "Problems and critical issues",
+          "base": "#EF4444",
+          "soft": "#FEE2E2",
+          "usage": ["errors", "deletions", "failures"]
+        },
+        "info": {
+          "description": "Information and tips",
+          "base": "#00C2FF",
+          "soft": "#F0F9FF",
+          "usage": ["information", "tips", "help text"]
+        }
+      }
+    },
+
+    "typography": {
+      "font_family": {
+        "primary": "'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        "mono": "'Fira Code', monospace",
+        "usage": {
+          "primary": "body text, headings, interface",
+          "mono": "code blocks, technical content"
+        }
+      },
+      "font_weight": {
+        "regular": 400,
+        "bold": 600,
+        "extra_bold": 700
+      },
+      "scale": {
+        "h1": {
+          "size": "56px",
+          "weight": 700,
+          "line_height": 1.15,
+          "letter_spacing": "-0.02em"
+        },
+        "h2": {
+          "size": "44px",
+          "weight": 700,
+          "line_height": 1.15,
+          "letter_spacing": "-0.02em"
+        },
+        "h3": {
+          "size": "32px",
+          "weight": 700,
+          "line_height": 1.15,
+          "letter_spacing": "-0.02em"
+        },
+        "h4": {
+          "size": "24px",
+          "weight": 700,
+          "line_height": 1.2,
+          "letter_spacing": "-0.01em"
+        },
+        "h5": {
+          "size": "20px",
+          "weight": 600,
+          "line_height": 1.2,
+          "letter_spacing": "0em"
+        },
+        "h6": {
+          "size": "16px",
+          "weight": 600,
+          "line_height": 1.25,
+          "letter_spacing": "0em"
+        },
+        "body": {
+          "size": "16px",
+          "weight": 400,
+          "line_height": 1.7
+        },
+        "body_small": {
+          "size": "14px",
+          "weight": 400,
+          "line_height": 1.6
+        },
+        "tiny": {
+          "size": "12px",
+          "weight": 400,
+          "line_height": 1.5
+        }
+      }
+    },
+
+    "spacing": {
+      "unit": "4px",
+      "scale": {
+        "xs": "4px",
+        "sm": "8px",
+        "md": "12px",
+        "base": "16px",
+        "lg": "24px",
+        "xl": "32px",
+        "2xl": "48px",
+        "3xl": "64px",
+        "4xl": "96px",
+        "5xl": "128px"
+      },
+      "usage": {
+        "xs": "small gaps, minimal spacing",
+        "sm": "small padding, minor spacing",
+        "md": "component internal spacing",
+        "base": "standard padding, normal spacing",
+        "lg": "section padding, card padding",
+        "xl": "large section spacing",
+        "2xl": "page section spacing",
+        "3xl": "major section breaks",
+        "4xl": "large feature sections",
+        "5xl": "full-width spacing"
+      },
+      "section_padding": {
+        "small": "12px",
+        "medium": "24px",
+        "large": "40px",
+        "rule": "Use 12px on small screens, 24px on medium screens, and 40px on large screens for section/layout padding."
+      }
+    },
+
+    "border_radius": {
+      "unit": "px",
+      "scale": {
+        "none": "0px",
+        "sm": "4px",
+        "md": "8px",
+        "lg": "12px",
+        "xl": "16px",
+        "full": "9999px"
+      },
+      "usage": {
+        "none": "no rounding",
+        "sm": "subtle rounding, inputs",
+        "md": "buttons, small cards",
+        "lg": "cards, containers",
+        "xl": "large containers, modals",
+        "full": "pills, badges, circles"
+      }
+    },
+
+    "shadow": {
+      "system": {
+        "sm": "0 2px 8px rgba(0, 0, 0, 0.04)",
+        "md": "0 4px 16px rgba(0, 0, 0, 0.08)",
+        "lg": "0 8px 24px rgba(0, 0, 0, 0.12)",
+        "glow_blue": "0 0 24px rgba(0, 194, 255, 0.2)",
+        "glow_red": "0 0 24px rgba(225, 6, 0, 0.2)",
+        "glow_orange": "0 0 24px rgba(255, 122, 61, 0.2)"
+      },
+      "usage": {
+        "sm": "subtle elevation, hover states",
+        "md": "standard elevation, cards",
+        "lg": "prominent elevation, modals",
+        "glow": "focus states, highlights"
+      }
+    },
+
+    "transitions": {
+      "duration": {
+        "fast": "0.15s",
+        "base": "0.2s",
+        "slow": "0.3s",
+        "slower": "0.5s"
+      },
+      "timing": {
+        "ease": "ease",
+        "ease_out": "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        "ease_in_out": "cubic-bezier(0.4, 0, 0.2, 1)"
+      },
+      "usage": {
+        "fast": "quick feedback, micro-interactions",
+        "base": "standard transitions, hover effects",
+        "slow": "important changes, page transitions",
+        "slower": "background animations, modals"
+      }
+    },
+
+    "z_index": {
+      "scale": {
+        "dropdown": 100,
+        "sticky": 150,
+        "modal_backdrop": 200,
+        "modal": 210,
+        "tooltip": 220,
+        "notification": 230
+      },
+      "usage": {
+        "dropdown": "dropdown menus",
+        "sticky": "sticky headers, footers",
+        "modal_backdrop": "modal overlays",
+        "modal": "modal dialogs",
+        "tooltip": "tooltips, popovers",
+        "notification": "toast notifications, alerts"
+      }
+    },
+
+    "components": {
+      "button": {
+        "variants": {
+          "primary": {
+            "background": "#E10600",
+            "text": "#FFFFFF",
+            "border": "none",
+            "hover_background": "#B80500",
+            "focus_shadow": "0 0 24px rgba(225, 6, 0, 0.2)"
+          },
+          "secondary": {
+            "background": "transparent",
+            "text": "#E10600",
+            "border": "2px solid #E10600",
+            "hover_background": "rgba(225, 6, 0, 0.05)",
+            "focus_shadow": "0 0 24px rgba(225, 6, 0, 0.2)"
+          },
+          "ghost": {
+            "background": "transparent",
+            "text": "#1A1A1A",
+            "border": "none",
+            "hover_background": "#F5F5F5"
+          }
+        },
+        "padding": "12px 24px",
+        "border_radius": "8px",
+        "font_weight": 600,
+        "transition": "200ms ease"
+      },
+      "card": {
+        "background": "#FFFFFF",
+        "border": "1px solid #E8E8E8",
+        "border_radius": "12px",
+        "padding": "24px",
+        "shadow": "0 2px 8px rgba(0, 0, 0, 0.04)",
+        "transition": "all 300ms ease",
+        "hover_shadow": "0 8px 24px rgba(0, 0, 0, 0.12)",
+        "hover_transform": "translateY(-4px)"
+      },
+      "input": {
+        "background": "#FFFFFF",
+        "border": "2px solid #E8E8E8",
+        "border_radius": "8px",
+        "padding": "12px 16px",
+        "font_size": "16px",
+        "focus_border": "2px solid #00C2FF",
+        "focus_shadow": "0 0 24px rgba(0, 194, 255, 0.2)"
+      },
+      "badge": {
+        "padding": "4px 12px",
+        "border_radius": "9999px",
+        "font_size": "12px",
+        "font_weight": 600,
+        "text_transform": "uppercase",
+        "letter_spacing": "0.5px"
+      }
+    },
+
+    "responsive_breakpoints": {
+      "mobile": {
+        "min": "0px",
+        "max": "479px",
+        "container_padding": "12px"
+      },
+      "tablet": {
+        "min": "480px",
+        "max": "767px",
+        "container_padding": "16px"
+      },
+      "desktop": {
+        "min": "768px",
+        "max": "1199px",
+        "container_padding": "24px"
+      },
+      "wide": {
+        "min": "1200px",
+        "max": "unlimited",
+        "container_padding": "24px"
+      }
+    },
+
+    "layout": {
+      "container_max_width": "1200px",
+      "grid_columns": 12,
+      "gutter": "24px"
+    },
+
+    "accessibility": {
+      "contrast_ratio_minimum": "4.5:1",
+      "touch_target_minimum": "44x44px",
+      "focus_indicator": {
+        "outline": "2px solid #00C2FF",
+        "outline_offset": "2px"
+      },
+      "font_size_minimum": "12px"
+    },
+
+    "animations": {
+      "fade_in": {
+        "duration": "300ms",
+        "timing": "ease",
+        "from": { "opacity": 0 },
+        "to": { "opacity": 1 }
+      },
+      "slide_up": {
+        "duration": "300ms",
+        "timing": "ease",
+        "from": { "opacity": 0, "transform": "translateY(20px)" },
+        "to": { "opacity": 1, "transform": "translateY(0)" }
+      },
+      "scale": {
+        "duration": "200ms",
+        "timing": "ease",
+        "from": { "transform": "scale(0.95)" },
+        "to": { "transform": "scale(1)" }
+      }
+    },
+
+    "dark_mode": {
+      "strategy": "prefers-color-scheme: dark",
+      "colors": {
+        "background_primary": "#0F0F0F",
+        "background_secondary": "#1A1A1A",
+        "background_tertiary": "#252525",
+        "text": "#E8E8E8",
+        "text_secondary": "#999999",
+        "border": "#333333",
+        "accent_blue": "#50DDFF",
+        "accent_orange": "#FFB399"
+      }
+    }
+  }
+}

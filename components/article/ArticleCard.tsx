@@ -12,6 +12,7 @@ interface ArticleCardProps {
   category: string;
   date: string;
   readTime: string;
+  locale?: 'en' | 'pt-br';
   author: {
     name: string;
     avatar: string;
@@ -25,8 +26,13 @@ export default function ArticleCard({
   category,
   date,
   readTime,
+  locale = 'en',
   author,
 }: ArticleCardProps) {
+  const t =
+    locale === 'pt-br'
+      ? { read: 'leitura', readMore: 'Ler artigo completo' }
+      : { read: 'read', readMore: 'Read full article' };
   return (
     <article className="card group">
       <div className="flex flex-col gap-4">
@@ -36,14 +42,14 @@ export default function ArticleCard({
             {category}
           </span>
           <time dateTime={date}>
-            {new Date(date).toLocaleDateString('pt-BR', {
+            {new Date(date).toLocaleDateString(locale === 'pt-br' ? 'pt-BR' : 'en-US', {
               day: 'numeric',
               month: 'long',
               year: 'numeric',
             })}
           </time>
           <span>•</span>
-          <span>{readTime} de leitura</span>
+          <span>{readTime} {t.read}</span>
         </div>
 
         {/* Content */}
@@ -66,7 +72,7 @@ export default function ArticleCard({
           href={`/articles/${slug}`}
           className="text-[var(--color-primary)] font-semibold flex items-center gap-2 hover:text-[var(--color-primary-dark)] transition-colors"
         >
-          Ler artigo completo
+          {t.readMore}
           <span className="transition-transform group-hover:translate-x-1">
             →
           </span>

@@ -6,6 +6,7 @@
  */
 
 import { PrismaClient } from '@prisma/client';
+import { hashPassword } from '../lib/auth';
 
 const prisma = new PrismaClient();
 
@@ -17,9 +18,13 @@ async function main() {
     where: { email: 'team@frontmakers.com' },
     update: {},
     create: {
-      email: 'team@frontmakers. com',
+      email: 'team@frontmakers.com',
       name: 'Frontmakers Team',
-      role: 'ADMIN',
+      profession: 'Community Team',
+      state: 'CA',
+      country: 'US',
+      newsletterOptIn: false,
+      passwordHash: hashPassword('Frontmakers!123'),
     },
   });
 

@@ -134,6 +134,14 @@ frontmakers/
 - **Headings:** Bold, tight line-height
 - **Body:** 1.7 line-height
 
+### Design System Standards
+
+- **Specification:** [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)
+- **Usage Guide:** [DESIGN_SYSTEM_USAGE.md](DESIGN_SYSTEM_USAGE.md)
+- **Responsive Strategy (Official):** [DESIGN_SYSTEM.md - 8.4 Responsive Strategy](DESIGN_SYSTEM.md#84-responsive-strategy-project-standard)
+- **Responsive Rules & Patterns:** [DESIGN_SYSTEM_USAGE.md - 6. Responsive Design](DESIGN_SYSTEM_USAGE.md#6-responsive-design)
+- **Engineering Rules:** [docs/copilot-instructions.md](docs/copilot-instructions.md)
+
 ## 🔗 Links
 
 - **Home:** `/`
@@ -294,11 +302,11 @@ NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 - [ ] Newsletter
 - [ ] Sistema de comentários
 
-### Fase 3 - Monetização
-- [ ] Plano Pro
-- [ ] Ferramentas premium
-- [ ] API para desenvolvedores
-- [ ] Ebooks e cursos
+### Fase 3 - Comunidade
+- [ ] Threads por artigo
+- [ ] Votação em discussões
+- [ ] Melhor resposta em threads
+- [ ] Perfis de autor
 
 ## 🤝 Contribuindo
 

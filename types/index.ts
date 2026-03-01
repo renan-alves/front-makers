@@ -122,3 +122,34 @@ export interface ConversionResult {
   output: number;
   unit: string;
 }
+
+// Discussion domain types
+export type DiscussionSort = 'relevant' | 'recent' | 'top';
+
+export interface Thread {
+  id: string;
+  articleSlug: string;
+  title: string;
+  body: string;
+  author: {
+    name: string;
+    avatar: string;
+  };
+  createdAt: string;
+  votes: number;
+  repliesCount: number;
+  isResolved?: boolean;
+}
+
+export interface Reply {
+  id: string;
+  threadId: string;
+  body: string;
+  author: {
+    name: string;
+    avatar: string;
+  };
+  createdAt: string;
+  votes: number;
+  isBestAnswer?: boolean;
+}

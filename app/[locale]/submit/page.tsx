@@ -1,15 +1,139 @@
 'use client';
 
-import { useState } from 'react';
+import { use, useState } from 'react';
 import Link from 'next/link';
-import type { Metadata } from 'next';
 
 /**
  * Submit Article Page
  * 
  * Allows community members to submit articles for review
  */
-export default function SubmitPage() {
+interface Props {
+  params: Promise<{ locale: string }>;
+}
+
+export default function SubmitPage({ params }: Props) {
+  const { locale } = use(params);
+  const t =
+    locale === 'pt-br'
+      ? {
+          successTitle: 'Artigo enviado com sucesso!',
+          successBody:
+            'Obrigado pelo envio. Nossa equipe vai revisar seu artigo e retornar por email em 3 a 5 dias uteis.',
+          successHome: 'Ir para a Home',
+          successAnother: 'Enviar outro artigo',
+          breadcrumbHome: 'Inicio',
+          breadcrumbSubmit: 'Enviar artigo',
+          title: 'Envie seu artigo',
+          subtitle:
+            'Compartilhe conhecimento com a comunidade Frontmakers. Envie seu artigo para revisao e ajude devs a aprender novas habilidades.',
+          guidelinesTitle: 'Diretrizes de envio',
+          guidelines: [
+            'Artigos devem ter pelo menos 500 palavras',
+            'O conteudo deve ser original e nao publicado em outro lugar',
+            'Use Markdown para melhor legibilidade',
+            'Inclua exemplos de codigo quando relevante',
+            'O tempo de revisao costuma ser de 3 a 5 dias uteis',
+          ],
+          authorTitle: 'Informacoes do autor',
+          yourName: 'Seu nome *',
+          yourEmail: 'Seu email *',
+          detailsTitle: 'Detalhes do artigo',
+          articleTitle: 'Titulo do artigo *',
+          category: 'Categoria',
+          selectCategory: 'Selecione uma categoria',
+          tags: 'Tags (separadas por virgula)',
+          content: 'Conteudo do artigo (Markdown) *',
+          minChars: 'Minimo de 100 caracteres. Use Markdown para formatar.',
+          submit: 'Enviar artigo',
+          submitting: 'Enviando...',
+          cancel: 'Cancelar',
+          placeholders: {
+            name: 'Joao Silva',
+            email: 'joao@exemplo.com',
+            title: 'ex: Tecnicas avancadas de CSS Grid para 2026',
+            tags: 'css, grid, layout',
+          },
+          sample: `# Introducao
+
+Seu conteudo aqui usando Markdown...
+
+## Exemplo de codigo
+
+\`\`\`css
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+\`\`\`
+
+## Conclusao
+
+Finalize seu artigo...`,
+          errors: {
+            submit: 'Falha ao enviar artigo',
+            generic: 'Ocorreu um erro',
+          },
+        }
+      : {
+          successTitle: 'Article Submitted Successfully!',
+          successBody:
+            'Thank you for your submission. Our team will review your article and get back to you via email within 3-5 business days.',
+          successHome: 'Go to Homepage',
+          successAnother: 'Submit Another Article',
+          breadcrumbHome: 'Home',
+          breadcrumbSubmit: 'Submit Article',
+          title: 'Submit Your Article',
+          subtitle:
+            'Share your knowledge with the Frontmakers community. Submit your article for review and help developers learn new skills.',
+          guidelinesTitle: 'Submission Guidelines',
+          guidelines: [
+            'Articles should be at least 500 words',
+            'Content must be original and not published elsewhere',
+            'Use Markdown formatting for better readability',
+            'Include code examples when relevant',
+            'Review time is typically 3-5 business days',
+          ],
+          authorTitle: 'Author Information',
+          yourName: 'Your Name *',
+          yourEmail: 'Your Email *',
+          detailsTitle: 'Article Details',
+          articleTitle: 'Article Title *',
+          category: 'Category',
+          selectCategory: 'Select a category',
+          tags: 'Tags (comma-separated)',
+          content: 'Article Content (Markdown) *',
+          minChars: 'Minimum 100 characters. Use Markdown for formatting.',
+          submit: 'Submit Article',
+          submitting: 'Submitting...',
+          cancel: 'Cancel',
+          placeholders: {
+            name: 'John Doe',
+            email: 'john@example.com',
+            title: 'e.g., Advanced CSS Grid Techniques for 2026',
+            tags: 'css, grid, layout',
+          },
+          sample: `# Introduction
+
+Your article content here using Markdown formatting...
+
+## Code Example
+
+\`\`\`css
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+\`\`\`
+
+## Conclusion
+
+Wrap up your article...`,
+          errors: {
+            submit: 'Failed to submit article',
+            generic: 'An error occurred',
+          },
+        };
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -51,7 +175,7 @@ export default function SubmitPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit article');
+        throw new Error(data.error || t.errors.submit);
       }
 
       setStatus('success');
@@ -65,7 +189,7 @@ export default function SubmitPage() {
       });
     } catch (error) {
       setStatus('error');
-      setErrorMessage(error instanceof Error ? error.message : 'An error occurred');
+      setErrorMessage(error instanceof Error ? error.message : t.errors.generic);
     }
   };
 
@@ -75,20 +199,19 @@ export default function SubmitPage() {
         <div className="container-grid">
           <div className="max-w-2xl mx-auto bg-primary p-12 rounded-2xl border-2 border-[var(--color-border)] text-center">
             <div className="text-6xl mb-6">✅</div>
-            <h1 className="text-3xl font-bold mb-4">Article Submitted Successfully!</h1>
+            <h1 className="text-3xl font-bold mb-4">{t.successTitle}</h1>
             <p className="text-lg text-secondary mb-8">
-              Thank you for your submission. Our team will review your article and get back to you
-              via email within 3-5 business days.
+              {t.successBody}
             </p>
             <div className="flex gap-4 justify-center">
-              <Link href="/en" className="btn-primary">
-                Go to Homepage
+              <Link href={`/${locale}`} className="btn-primary">
+                {t.successHome}
               </Link>
               <button
                 onClick={() => setStatus('idle')}
                 className="btn-secondary"
               >
-                Submit Another Article
+                {t.successAnother}
               </button>
             </div>
           </div>
@@ -108,21 +231,20 @@ export default function SubmitPage() {
               <ol className="flex items-center gap-2 text-sm text-secondary">
                 <li>
                   <Link
-                    href="/en"
+                    href={`/${locale}`}
                     className="hover:text-[var(--color-primary)] transition-colors"
                   >
-                    Home
+                    {t.breadcrumbHome}
                   </Link>
                 </li>
                 <li>→</li>
-                <li className="text-primary font-semibold">Submit Article</li>
+                <li className="text-primary font-semibold">{t.breadcrumbSubmit}</li>
               </ol>
             </nav>
 
-            <h1 className="mb-4">Submit Your Article</h1>
+            <h1 className="mb-4">{t.title}</h1>
             <p className="text-xl text-secondary">
-              Share your knowledge with the Frontmakers community. Submit your article for review
-              and help developers learn new skills.
+              {t.subtitle}
             </p>
           </div>
         </div>
@@ -141,23 +263,21 @@ export default function SubmitPage() {
 
             {/* Info Box */}
             <div className="p-6 bg-neutral-50 border-2 border-[var(--color-border)] rounded-xl">
-              <h3 className="font-bold text-lg mb-2">Submission Guidelines</h3>
+              <h3 className="font-bold text-lg mb-2">{t.guidelinesTitle}</h3>
               <ul className="text-secondary space-y-2 text-sm">
-                <li>• Articles should be at least 500 words</li>
-                <li>• Content must be original and not published elsewhere</li>
-                <li>• Use Markdown formatting for better readability</li>
-                <li>• Include code examples when relevant</li>
-                <li>• Review time is typically 3-5 business days</li>
+                {t.guidelines.map((item) => (
+                  <li key={item}>• {item}</li>
+                ))}
               </ul>
             </div>
 
             {/* Author Info */}
             <div>
-              <h2 className="text-xl font-bold mb-4">Author Information</h2>
+              <h2 className="text-xl font-bold mb-4">{t.authorTitle}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="authorName" className="block text-sm font-semibold mb-2">
-                    Your Name *
+                    {t.yourName}
                   </label>
                   <input
                     type="text"
@@ -167,12 +287,12 @@ export default function SubmitPage() {
                     onChange={handleChange}
                     required
                     className="input w-full"
-                    placeholder="John Doe"
+                    placeholder={t.placeholders.name}
                   />
                 </div>
                 <div>
                   <label htmlFor="authorEmail" className="block text-sm font-semibold mb-2">
-                    Your Email *
+                    {t.yourEmail}
                   </label>
                   <input
                     type="email"
@@ -182,7 +302,7 @@ export default function SubmitPage() {
                     onChange={handleChange}
                     required
                     className="input w-full"
-                    placeholder="john@example.com"
+                    placeholder={t.placeholders.email}
                   />
                 </div>
               </div>
@@ -190,11 +310,11 @@ export default function SubmitPage() {
 
             {/* Article Info */}
             <div>
-              <h2 className="text-xl font-bold mb-4">Article Details</h2>
+              <h2 className="text-xl font-bold mb-4">{t.detailsTitle}</h2>
               <div className="space-y-4">
                 <div>
                   <label htmlFor="title" className="block text-sm font-semibold mb-2">
-                    Article Title *
+                    {t.articleTitle}
                   </label>
                   <input
                     type="text"
@@ -204,14 +324,14 @@ export default function SubmitPage() {
                     onChange={handleChange}
                     required
                     className="input w-full"
-                    placeholder="e.g., Advanced CSS Grid Techniques for 2026"
+                    placeholder={t.placeholders.title}
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="category" className="block text-sm font-semibold mb-2">
-                      Category
+                      {t.category}
                     </label>
                     <select
                       id="category"
@@ -220,7 +340,7 @@ export default function SubmitPage() {
                       onChange={handleChange}
                       className="input w-full"
                     >
-                      <option value="">Select a category</option>
+                      <option value="">{t.selectCategory}</option>
                       <option value="CSS">CSS</option>
                       <option value="JavaScript">JavaScript</option>
                       <option value="TypeScript">TypeScript</option>
@@ -234,7 +354,7 @@ export default function SubmitPage() {
 
                   <div>
                     <label htmlFor="tags" className="block text-sm font-semibold mb-2">
-                      Tags (comma-separated)
+                      {t.tags}
                     </label>
                     <input
                       type="text"
@@ -243,14 +363,14 @@ export default function SubmitPage() {
                       value={formData.tags}
                       onChange={handleChange}
                       className="input w-full"
-                      placeholder="css, grid, layout"
+                      placeholder={t.placeholders.tags}
                     />
                   </div>
                 </div>
 
                 <div>
                   <label htmlFor="content" className="block text-sm font-semibold mb-2">
-                    Article Content (Markdown) *
+                    {t.content}
                   </label>
                   <textarea
                     id="content"
@@ -260,25 +380,10 @@ export default function SubmitPage() {
                     required
                     rows={20}
                     className="input w-full font-mono text-sm"
-                    placeholder={`# Introduction
-
-Your article content here using Markdown formatting...
-
-## Code Example
-
-\`\`\`css
-.container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-\`\`\`
-
-## Conclusion
-
-Wrap up your article...`}
+                    placeholder={t.sample}
                   />
                   <p className="text-sm text-secondary mt-2">
-                    Minimum 100 characters. Use Markdown for formatting.
+                    {t.minChars}
                   </p>
                 </div>
               </div>
@@ -291,10 +396,13 @@ Wrap up your article...`}
                 disabled={status === 'submitting'}
                 className="btn-primary"
               >
-                {status === 'submitting' ? 'Submitting...' : 'Submit Article'}
+                {status === 'submitting' ? t.submitting : t.submit}
               </button>
-              <Link href="/en" className="text-secondary hover:text-primary transition-colors">
-                Cancel
+              <Link
+                href={`/${locale}`}
+                className="text-secondary hover:text-primary transition-colors"
+              >
+                {t.cancel}
               </Link>
             </div>
           </form>

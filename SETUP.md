@@ -127,9 +127,7 @@ frontmakers/
 - 🔜 Multi-language support (add `/pt`, `/es` routes)
 - 🔜 Authentication (NextAuth.js ready)
 - 🔜 Admin dashboard for moderation
-- 🔜 SaaS subscription model (Stripe)
 - 🔜 Email notifications
-- 🔜 Premium tools
 - 🔜 User profiles
 
 ## API Endpoints
@@ -168,7 +166,8 @@ GET /api/submissions?status=PENDING
 ### User
 
 - Prepared for authentication
-- Roles: ADMIN, AUTHOR, USER
+- Open profile model for all users
+- Everyone can publish articles, create threads, reply, and edit their own content
 
 ### Article
 
@@ -199,7 +198,6 @@ Future (not yet implemented):
 - `NEXTAUTH_URL` - NextAuth URL
 - `NEXTAUTH_SECRET` - NextAuth secret
 - `SMTP_*` - Email configuration
-- `STRIPE_*` - Stripe configuration
 
 ## Design System
 

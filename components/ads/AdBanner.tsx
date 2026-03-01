@@ -21,7 +21,7 @@ import { useEffect } from 'react';
  * 3. Replace the data-ad-slot below with your IDs
  */
 
-type SlotType = 'hero' | 'article-list' | 'article-content' | 'tool-end' | 'footer';
+type SlotType = 'hero' | 'article-list' | 'article-content' | 'article-bottom' | 'tool-end' | 'footer';
 
 interface AdBannerProps {
   slot: SlotType;
@@ -50,6 +50,11 @@ const slotConfigs: Record<SlotType, SlotConfig> = {
     style: { minHeight: '280px' },
     format: 'fluid',
     layout: 'in-article',
+  },
+  'article-bottom': {
+    style: { minHeight: '280px' },
+    format: 'auto',
+    responsive: 'true',
   },
   'tool-end': {
     style: { minHeight: '200px' },

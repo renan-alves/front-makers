@@ -11,11 +11,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   
   return {
-    title: locale === 'en' ? 'Articles' : 'Artigos',
+    title: locale === 'pt-br' ? 'Artigos' : 'Articles',
     description:
       locale === 'en'
         ? 'Technical articles about frontend development, CSS, JavaScript, TypeScript, React and Next.js.'
-        : 'Artigos técnicos sobre desenvolvimento frontend, CSS, JavaScript, TypeScript, React e Next.js.',
+        : 'Artigos tecnicos sobre desenvolvimento frontend, CSS, JavaScript, TypeScript, React e Next.js.',
   };
 }
 
@@ -32,10 +32,13 @@ export default async function ArticlesPage({ params }: Props) {
       subtitle: 'Practical and in-depth articles about modern frontend development. Learn CSS, JavaScript, TypeScript, React, Next.js and much more.',
       readMore: 'Read full article',
     },
-    pt: {
-      title: 'Articles',
-      subtitle: 'Practical and in-depth articles about modern frontend development. Learn CSS, JavaScript, TypeScript, React, Next.js and much more.',
-      readMore: 'Read full article',
+    'pt-br': {
+      title: 'Artigos',
+      subtitle:
+        'Artigos praticos e aprofundados sobre desenvolvimento frontend moderno. Aprenda CSS, JavaScript, TypeScript, React, Next.js e muito mais.',
+      readMore: 'Ler artigo completo',
+      empty: 'Nenhum artigo publicado ainda.',
+      minRead: 'min de leitura',
     },
   };
 
@@ -60,7 +63,9 @@ export default async function ArticlesPage({ params }: Props) {
         <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
           {articles.length === 0 ? (
             <div className="py-16 text-center">
-              <p className="text-lg text-secondary">No articles published yet.</p>
+              <p className="text-lg text-secondary">
+                {locale === 'pt-br' ? t.empty : 'No articles published yet.'}
+              </p>
             </div>
           ) : (
             articles.map((article, index) => (
@@ -85,7 +90,10 @@ export default async function ArticlesPage({ params }: Props) {
                           <span>•</span>
                         </>
                       )}
-                      <span>{article.readTime} {locale === 'en' ? 'min read' : 'de leitura'}</span>
+                      <span>
+                        {article.readTime}{' '}
+                        {locale === 'en' ? 'min read' : t.minRead ?? 'de leitura'}
+                      </span>
                     </div>
 
                     {/* Content */}

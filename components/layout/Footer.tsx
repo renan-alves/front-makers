@@ -12,6 +12,26 @@ interface FooterProps {
 
 export default function Footer({ locale }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const t =
+    locale === 'pt-br'
+      ? {
+          about:
+            'Plataforma completa com artigos e recursos para desenvolvedores frontend modernos.',
+          navigation: 'Navegacao',
+          articles: 'Artigos',
+          submit: 'Enviar artigo',
+          home: 'Inicio',
+          rights: 'Todos os direitos reservados.',
+        }
+      : {
+          about:
+            'Complete platform with articles and resources for modern frontend developers.',
+          navigation: 'Navigation',
+          articles: 'Articles',
+          submit: 'Submit Article',
+          home: 'Home',
+          rights: 'All rights reserved.',
+        };
 
   return (
     <footer className="bg-secondary border-t border-light mt-24">
@@ -21,38 +41,29 @@ export default function Footer({ locale }: FooterProps) {
       </div>
 
       <div className="container-grid py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* About */}
           <div>
             <h3 className="text-lg font-bold text-primary mb-4">
               Frontmakers
             </h3>
             <p className="text-secondary text-sm leading-relaxed">
-              Complete platform with tools, articles and resources for modern
-              frontend developers.
+              {t.about}
             </p>
           </div>
 
           {/* Main Links */}
           <div>
             <h3 className="text-lg font-bold text-primary mb-4">
-              Navigation
+              {t.navigation}
             </h3>
             <ul className="space-y-2">
-              <li>
-                <Link
-                  href={`/${locale}/tools`}
-                  className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
-                >
-                  Tools
-                </Link>
-              </li>
               <li>
                 <Link
                   href={`/${locale}/articles`}
                   className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
                 >
-                  Articles
+                  {t.articles}
                 </Link>
               </li>
               <li>
@@ -60,7 +71,7 @@ export default function Footer({ locale }: FooterProps) {
                   href={`/${locale}/submit`}
                   className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
                 >
-                  Submit Article
+                  {t.submit}
                 </Link>
               </li>
               <li>
@@ -68,50 +79,18 @@ export default function Footer({ locale }: FooterProps) {
                   href={`/${locale}`}
                   className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
                 >
-                  Home
+                  {t.home}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Tools */}
-          <div>
-            <h3 className="text-lg font-bold text-primary mb-4">
-              Tools
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href={`/${locale}/tools/box-shadow`}
-                  className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
-                >
-                  Box Shadow Generator
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${locale}/tools/gradient`}
-                  className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
-                >
-                  Gradient Generator
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${locale}/tools/px-rem`}
-                  className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
-                >
-                  PX → REM Converter
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
 
         {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-light text-center">
           <p className="text-secondary text-sm">
-            © {currentYear} Frontmakers. All rights reserved.
+            © {currentYear} Frontmakers. {t.rights}
           </p>
         </div>
       </div>

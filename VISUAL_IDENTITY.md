@@ -273,10 +273,10 @@ p {
 - [ ] Adicionar ilustrações custom
 - [ ] Desenvolver design system completo
 
-### Fase 3 - SaaS Ready
+### Fase 3 - Community Ready
 - [ ] Dashboard styles
-- [ ] Pricing tables
-- [ ] Account settings UI
+- [ ] Discussion thread UI patterns
+- [ ] Author profile settings UI
 
 ---
 

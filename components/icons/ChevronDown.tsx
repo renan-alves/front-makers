@@ -1,0 +1,22 @@
+import type { ComponentPropsWithoutRef } from 'react';
+
+type ChevronDownProps = ComponentPropsWithoutRef<'svg'>;
+
+export default function ChevronDown(props: ChevronDownProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+      focusable="false"
+      {...props}
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.25a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}

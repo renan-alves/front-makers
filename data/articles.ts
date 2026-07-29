@@ -611,7 +611,7 @@ const loadBanner = () => {
 \`\`\`css
 /* ❌ Ruim - causa reflow */
 .box {
-  transition: width 0.3s;
+  transition: transform 0.3s;
 }
 
 /* ✅ Bom - usa compositing */

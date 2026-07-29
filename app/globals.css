@@ -32,6 +32,9 @@
   /* Legacy Support - mapped to new colors */
   --bg-primary: var(--color-bg-primary);
   --bg-secondary: var(--color-bg-secondary);
+  --color-background: var(--bg-primary);
+  --color-background-alt: var(--bg-secondary);
+  --color-text-muted: var(--color-text-secondary);
   --text-primary: var(--color-text);
   --text-secondary: var(--color-text-secondary);
   --text-inverse: #ffffff;
@@ -243,8 +246,7 @@ p {
 }
 
 .prose blockquote {
-  @apply border-l-4 border-[var(--color-primary)] pl-6 italic 
-         text-[var(--color-text-muted)] my-6;
+    @apply border-l-2 border-[var(--color-border)] pl-4 italic 
 }
 
 /* ========================================

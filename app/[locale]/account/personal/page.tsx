@@ -2,6 +2,7 @@
 
 import { use, useEffect, useMemo, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
@@ -250,7 +251,14 @@ export default function AccountPersonalPage({ params }: Props) {
         isValid: /[^A-Za-z0-9]/.test(passwordState.newPassword),
       },
     ],
-    [passwordState.newPassword]
+    [
+      passwordState.newPassword,
+      t.password.rules.length,
+      t.password.rules.lower,
+      t.password.rules.upper,
+      t.password.rules.number,
+      t.password.rules.symbol,
+    ]
   );
 
   const isPasswordStrong = passwordChecks.every((check) => check.isValid);
@@ -572,9 +580,11 @@ export default function AccountPersonalPage({ params }: Props) {
                 />
                 {hasAvatar && (
                   <div className="mt-3 flex items-center gap-3">
-                    <img
+                    <Image
                       src={account.avatarDataUrl}
                       alt="Avatar preview"
+                      width={48}
+                      height={48}
                       className="h-12 w-12 rounded-full object-cover border border-light"
                     />
                     <div className="flex flex-col gap-1">

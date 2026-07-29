@@ -123,7 +123,7 @@ export default function AccountArticlesPage({ params }: Props) {
     return () => {
       controller.abort();
     };
-  }, [userId]);
+  }, [userId, t.loadFailed]);
 
   const handleDeleteArticle = async (articleId: string) => {
     if (!userId) {

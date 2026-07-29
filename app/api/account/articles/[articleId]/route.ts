@@ -1,11 +1,11 @@
+
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-interface Params {
-  params: { articleId: string };
-}
-
-export async function DELETE(request: Request, { params }: Params) {
+export async function DELETE(
+  request: Request,
+  context: { params: Promise<{ articleId: string }> }
+) {
   try {
     const body = await request.json();
     const { userId } = body ?? {};
@@ -17,8 +17,9 @@ export async function DELETE(request: Request, { params }: Params) {
       );
     }
 
+    const { articleId } = await context.params;
     const article = await prisma.article.findUnique({
-      where: { id: params.articleId },
+      where: { id: articleId },
       select: { authorId: true },
     });
 
@@ -31,19 +32,19 @@ export async function DELETE(request: Request, { params }: Params) {
 
     await prisma.$transaction([
       prisma.threadVote.deleteMany({
-        where: { thread: { articleId: params.articleId } },
+        where: { thread: { articleId } },
       }),
       prisma.replyVote.deleteMany({
-        where: { reply: { thread: { articleId: params.articleId } } },
+        where: { reply: { thread: { articleId } } },
       }),
       prisma.reply.deleteMany({
-        where: { thread: { articleId: params.articleId } },
+        where: { thread: { articleId } },
       }),
       prisma.thread.deleteMany({
-        where: { articleId: params.articleId } },
+        where: { articleId }
       }),
       prisma.article.delete({
-        where: { id: params.articleId },
+        where: { id: articleId },
       }),
     ]);
 

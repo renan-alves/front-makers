@@ -192,7 +192,14 @@ export default function AuthPage({ params }: Props) {
         isValid: /[^A-Za-z0-9]/.test(signupState.password),
       },
     ],
-    [signupState.password]
+    [
+      signupState.password,
+      t.passwordRules.length,
+      t.passwordRules.lower,
+      t.passwordRules.upper,
+      t.passwordRules.number,
+      t.passwordRules.symbol,
+    ]
   );
 
   const isPasswordStrong = passwordChecks.every((check) => check.isValid);

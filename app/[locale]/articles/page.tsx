@@ -64,7 +64,7 @@ export default async function ArticlesPage({ params }: Props) {
           {articles.length === 0 ? (
             <div className="py-16 text-center">
               <p className="text-lg text-secondary">
-                {locale === 'pt-br' ? t.empty : 'No articles published yet.'}
+                {locale === 'pt-br' && 'empty' in t ? t.empty : 'No articles published yet.'}
               </p>
             </div>
           ) : (
@@ -92,7 +92,7 @@ export default async function ArticlesPage({ params }: Props) {
                       )}
                       <span>
                         {article.readTime}{' '}
-                        {locale === 'en' ? 'min read' : t.minRead ?? 'de leitura'}
+                        {locale === 'en' ? 'min read' : ('minRead' in t ? t.minRead : 'de leitura')}
                       </span>
                     </div>
 

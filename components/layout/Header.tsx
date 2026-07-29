@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   getLocalizedUrl,
@@ -142,7 +143,7 @@ export default function Header({ locale }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 bg-primary border-b border-light backdrop-blur-sm bg-opacity-95">
       <nav className="container-grid">
-        <div className="h-16 flex items-center justify-between">
+        <div className="h-20 flex items-center justify-between">
           <button
             type="button"
             aria-label="Toggle navigation menu"
@@ -158,14 +159,19 @@ export default function Header({ locale }: HeaderProps) {
           </button>
 
           <div className="flex items-center flex-1">
-            {/* Logo - FRONT (red) + MAKERS (black/white) */}
             <Link
               href={`/${locale}`}
               onClick={handleCloseMenu}
-              className="text-xl sm:text-2xl font-bold tracking-tight hover:opacity-80 transition-opacity"
+              className="flex items-center"
             >
-              <span className="text-[var(--color-primary)]">FRONT</span>
-              <span className="text-[var(--color-text)]">MAKERS</span>
+              <Image
+                src="/frontmakers-logo.webp"
+                alt="FrontMakers Logo"
+                width={140}
+                height={48}
+                priority
+                className="h-16 w-auto object-contain"
+              />
             </Link>
           </div>
 
@@ -297,10 +303,16 @@ export default function Header({ locale }: HeaderProps) {
                 <Link
                   href={`/${locale}`}
                   onClick={handleCloseMenu}
-                  className="text-lg font-bold tracking-tight hover:opacity-80 transition-opacity"
+                  className="flex items-center"
                 >
-                  <span className="text-[var(--color-primary)]">FRONT</span>
-                  <span className="text-[var(--color-text)]">MAKERS</span>
+                  <Image
+                    src="/frontmakers-logo.png"
+                    alt="FrontMakers Logo"
+                    width={180}
+                    height={60}
+                    priority
+                    className="h-10 w-auto object-contain"
+                  />
                 </Link>
 
                 <button

@@ -40,14 +40,14 @@ export default async function ThreadPage({ params }: Props) {
           <nav>
             <ol className="flex items-center gap-2 text-sm text-secondary flex-wrap">
               <li>
-                <Link href={`/${locale}`} className="hover:text-primary transition-colors">
+                <Link href="/" className="hover:text-primary transition-colors">
                   Home
                 </Link>
               </li>
               <li>→</li>
               <li>
                 <Link
-                  href={`/${locale}/articles/${thread.articleSlug}?tab=discussions`}
+                  href={`/articles/${thread.articleSlug}?tab=discussions`}
                   className="hover:text-primary transition-colors"
                 >
                   Discussões

@@ -13,21 +13,36 @@ export async function GET(request: Request) {
       );
     }
 
-    const articles = await prisma.article.findMany({
-      where: { authorId: userId },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        status: true,
-        category: true,
-        updatedAt: true,
-        publishedAt: true,
-      },
-      orderBy: { updatedAt: 'desc' },
-    });
+    const articles = await prisma.$queryRaw<Array<{
+      id: string;
+      title: string;
+      slug: string;
+      status: string;
+      category: string;
+      updatedAt: Date;
+      publishedAt: Date | null;
+    }>>
+      `
+        SELECT
+          id,
+          title,
+          slug,
+          status,
+          category,
+          "updatedAt",
+          "publishedAt"
+        FROM "Article"
+        WHERE "authorId" = ${userId}
+        ORDER BY "updatedAt" DESC
+      `;
 
-    return NextResponse.json(articles, { status: 200 });
+    return NextResponse.json(
+      articles.map((article) => ({
+        ...article,
+        status: article.status as 'PENDENT' | 'APPROVED' | 'REJECTED',
+      })),
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Account articles error:', error);
     return NextResponse.json(

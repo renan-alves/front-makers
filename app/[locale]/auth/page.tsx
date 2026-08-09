@@ -1,8 +1,8 @@
 'use client';
 
-import { use, useMemo, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import SocialAuthButton from '@/components/ui/SocialAuthButton';
 
@@ -47,6 +47,7 @@ const initialLoginState: LoginState = {
 export default function AuthPage({ params }: Props) {
   const { locale } = use(params);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t =
     locale === 'pt-br'
       ? {
@@ -204,6 +205,29 @@ export default function AuthPage({ params }: Props) {
 
   const isPasswordStrong = passwordChecks.every((check) => check.isValid);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const googleError = searchParams.get('error');
+    const detail = searchParams.get('detail');
+
+    if (googleError === 'google_missing_config') {
+      setFormError(
+        'Google authentication is not configured yet. Add GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and the correct redirect URL to your environment.'
+      );
+      return;
+    }
+
+    if (googleError === 'google') {
+      setFormError(
+        detail || 'We could not sign you in with Google. Please try again.'
+      );
+    }
+  }, [searchParams]);
+
+
   const handleSignupChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -271,6 +295,10 @@ export default function AuthPage({ params }: Props) {
       .finally(() => setIsSubmitting(false));
   };
 
+  const handleSocialAuth = () => {
+    window.location.assign('/api/auth/google');
+  };
+
   const handleLoginSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError('');
@@ -309,7 +337,7 @@ export default function AuthPage({ params }: Props) {
         const safeTarget =
           redirectTarget && redirectTarget.startsWith('/') && !redirectTarget.includes('/auth')
             ? redirectTarget
-            : `/${locale}`;
+            : '/';
         router.replace(safeTarget);
       })
       .catch((error) => {
@@ -369,9 +397,7 @@ export default function AuthPage({ params }: Props) {
               </div>
 
               <div className="grid gap-3">
-                <SocialAuthButton provider="google" />
-                <SocialAuthButton provider="linkedin" />
-                <SocialAuthButton provider="github" />
+                <SocialAuthButton provider="google" onClick={handleSocialAuth} />
               </div>
 
               <div className="flex items-center gap-3">
@@ -592,7 +618,7 @@ export default function AuthPage({ params }: Props) {
               <div className="pt-4 border-t border-light">
                 <p className="text-sm text-secondary">
                   {t.backHomePrefix}
-                  <Link href={`/${locale}`} className="text-[var(--color-primary)] font-semibold">
+                  <Link href="/" className="text-[var(--color-primary)] font-semibold">
                     {t.backHome}
                   </Link>
                   .

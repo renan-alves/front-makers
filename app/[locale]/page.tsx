@@ -115,15 +115,15 @@ export default async function Home({ params, searchParams }: Props) {
       }}
       list={
         sortedArticles.length === 0 ? (
-          <div className="card text-center">
+          <div key="home-feed-empty" className="card text-center">
             <h2 className="text-2xl mb-2">{t.emptyTitle}</h2>
             <p className="text-secondary">{t.emptySubtitle}</p>
           </div>
         ) : (
           sortedArticles.map((article) => (
             <Link
-              key={article.slug}
-              href={`/${locale}/articles/${article.slug}`}
+              key={article.id}
+              href={`/articles/${article.slug}`}
               className="card group"
             >
               <div className="space-y-4">
@@ -162,9 +162,9 @@ export default async function Home({ params, searchParams }: Props) {
 
                 {article.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
-                    {article.tags.slice(0, 4).map((tag) => (
+                    {article.tags.slice(0, 4).map((tag, tagIndex) => (
                       <span
-                        key={`${article.slug}-${tag}`}
+                        key={`${article.id}-tag-${tag}-${tagIndex}`}
                         className="px-2.5 py-1 text-xs rounded-full bg-[var(--color-accent-blue-soft)] text-accent-blue border border-[var(--color-accent-blue)] border-opacity-30"
                       >
                         #{tag}
@@ -178,7 +178,7 @@ export default async function Home({ params, searchParams }: Props) {
         )
       }
       aside={
-        <aside className="lg:sticky lg:top-24">
+        <aside key="home-sidebar" className="lg:sticky lg:top-24">
           <div className="card space-y-4">
             <div>
               <span className="text-xs font-semibold uppercase tracking-wide text-secondary">
@@ -187,7 +187,7 @@ export default async function Home({ params, searchParams }: Props) {
               <h3 className="text-2xl font-bold mt-2">{t.sidebarTitle}</h3>
             </div>
             <p className="text-secondary">{t.sidebarBody}</p>
-            <Link href={`/${locale}/submit`} className="btn-primary text-center">
+            <Link href="/submit" className="btn-primary text-center">
               {t.sidebarCta}
             </Link>
           </div>

@@ -13,7 +13,7 @@ type AccountArticle = {
   id: string;
   title: string;
   slug: string;
-  status: 'DRAFT' | 'PUBLISHED';
+  status: 'PENDENT' | 'APPROVED' | 'REJECTED';
   category: string;
   updatedAt: string;
   publishedAt: string | null;
@@ -46,7 +46,11 @@ export default function AccountArticlesPage({ params }: Props) {
           deleteConfirm: 'Excluir este artigo? Esta acao nao pode ser desfeita.',
           deleteFailed: 'Falha ao excluir artigo.',
           loadFailed: 'Falha ao carregar artigos.',
-          status: { draft: 'Rascunho', published: 'Publicado' },
+          status: {
+            pending: 'Pendent',
+            approved: 'Aprovado',
+            rejected: 'Não aprovado',
+          },
         }
       : {
           breadcrumb: 'Account',
@@ -65,7 +69,11 @@ export default function AccountArticlesPage({ params }: Props) {
           deleteConfirm: 'Delete this article? This action cannot be undone.',
           deleteFailed: 'Failed to delete article.',
           loadFailed: 'Failed to load articles.',
-          status: { draft: 'Draft', published: 'Published' },
+          status: {
+            pending: 'Pending',
+            approved: 'Approved',
+            rejected: 'Rejected',
+          },
         };
 
   useEffect(() => {
@@ -75,8 +83,8 @@ export default function AccountArticlesPage({ params }: Props) {
 
     const stored = window.localStorage.getItem('frontmakersUser');
     if (!stored) {
-      window.localStorage.setItem('frontmakersRedirect', `/${locale}/account/articles`);
-      router.replace(`/${locale}/auth`);
+      window.localStorage.setItem('frontmakersRedirect', '/account/articles');
+      router.replace('/auth');
       return;
     }
 
@@ -85,8 +93,8 @@ export default function AccountArticlesPage({ params }: Props) {
       setUserId(parsed.id);
     } catch {
       window.localStorage.removeItem('frontmakersUser');
-      window.localStorage.setItem('frontmakersRedirect', `/${locale}/account/articles`);
-      router.replace(`/${locale}/auth`);
+      window.localStorage.setItem('frontmakersRedirect', '/account/articles');
+      router.replace('/auth');
       return;
     }
   }, [locale, router]);
@@ -157,7 +165,7 @@ export default function AccountArticlesPage({ params }: Props) {
         <div className="container-grid">
           <div className="max-w-4xl space-y-3">
             <div className="text-sm text-secondary">
-              <Link href={`/${locale}/account`} className="hover:text-primary">
+              <Link href="/account" className="hover:text-primary">
                 {t.breadcrumb}
               </Link>{' '}
               / {t.title}
@@ -178,7 +186,7 @@ export default function AccountArticlesPage({ params }: Props) {
                 <h2 className="text-xl font-bold">{t.sectionTitle}</h2>
                 <p className="text-sm text-secondary">{t.sectionSubtitle}</p>
               </div>
-              <Button type="button" onClick={() => router.push(`/${locale}/submit`)}>
+              <Button type="button" onClick={() => router.push('/submit')}>
                 {t.create}
               </Button>
             </div>
@@ -206,9 +214,11 @@ export default function AccountArticlesPage({ params }: Props) {
                         <h3 className="text-lg font-semibold">{article.title}</h3>
                         <div className="text-xs text-secondary flex flex-wrap items-center gap-2 mt-1">
                           <span className="px-2 py-1 rounded-full bg-[var(--color-accent-blue-soft)] text-accent-blue font-semibold">
-                            {article.status === 'PUBLISHED'
-                              ? t.status.published
-                              : t.status.draft}
+                            {article.status === 'APPROVED'
+                              ? t.status.approved
+                              : article.status === 'REJECTED'
+                                ? t.status.rejected
+                                : t.status.pending}
                           </span>
                           <span>{article.category}</span>
                           <span>
@@ -220,7 +230,7 @@ export default function AccountArticlesPage({ params }: Props) {
                         </div>
                       </div>
                       <Link
-                        href={`/${locale}/articles/${article.slug}`}
+                        href={`/articles/${article.slug}`}
                         className="text-sm font-semibold text-[var(--color-primary)] hover:underline"
                       >
                         {t.view}
@@ -229,7 +239,7 @@ export default function AccountArticlesPage({ params }: Props) {
 
                     <div className="flex flex-wrap gap-3">
                       <Link
-                        href={`/${locale}/submit?articleId=${article.id}`}
+                        href={`/submit?articleId=${article.id}`}
                         className="text-sm font-semibold text-[var(--color-primary)] hover:underline"
                       >
                         {t.submitChange}

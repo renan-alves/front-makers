@@ -184,8 +184,8 @@ export default function AccountPersonalPage({ params }: Props) {
 
     const stored = window.localStorage.getItem('frontmakersUser');
     if (!stored) {
-      window.localStorage.setItem('frontmakersRedirect', `/${locale}/account/personal`);
-      router.replace(`/${locale}/auth`);
+      window.localStorage.setItem('frontmakersRedirect', '/account/personal');
+      router.replace('/auth');
       return;
     }
 
@@ -213,8 +213,8 @@ export default function AccountPersonalPage({ params }: Props) {
       });
     } catch {
       window.localStorage.removeItem('frontmakersUser');
-      window.localStorage.setItem('frontmakersRedirect', `/${locale}/account/personal`);
-      router.replace(`/${locale}/auth`);
+      window.localStorage.setItem('frontmakersRedirect', '/account/personal');
+      router.replace('/auth');
       return;
     }
 
@@ -422,7 +422,7 @@ export default function AccountPersonalPage({ params }: Props) {
         window.dispatchEvent(new Event('frontmakers-auth'));
       }
 
-      router.replace(`/${locale}/auth`);
+      router.replace('/auth');
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : t.errors.deleteFailed);
     }
@@ -433,7 +433,7 @@ export default function AccountPersonalPage({ params }: Props) {
       window.localStorage.removeItem('frontmakersUser');
       window.dispatchEvent(new Event('frontmakers-auth'));
     }
-    router.replace(`/${locale}/auth`);
+    router.replace('/auth');
   };
 
   if (isLoading) {
@@ -454,7 +454,7 @@ export default function AccountPersonalPage({ params }: Props) {
         <div className="container-grid">
           <div className="max-w-4xl space-y-3">
             <div className="text-sm text-secondary">
-              <Link href={`/${locale}/account`} className="hover:text-primary">
+              <Link href="/account" className="hover:text-primary">
                 {t.breadcrumb}
               </Link>{' '}
               / {t.title}

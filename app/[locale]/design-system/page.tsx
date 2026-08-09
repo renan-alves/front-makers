@@ -450,14 +450,14 @@ export default async function DesignSystemPage({ params }: Props) {
             <nav>
               <ol className="flex flex-wrap items-center gap-2 text-sm text-secondary">
                 <li>
-                  <Link href={`/${locale}`} className="hover:text-[var(--color-primary)] transition-colors">
+                  <Link href="/" className="hover:text-[var(--color-primary)] transition-colors">
                     {t.home}
                   </Link>
                 </li>
                 <li>→</li>
                 <li>
                   <Link
-                    href={`/${locale}/articles`}
+                    href="/articles"
                     className="hover:text-[var(--color-primary)] transition-colors"
                   >
                     {t.articles}
@@ -472,7 +472,7 @@ export default async function DesignSystemPage({ params }: Props) {
               <ol className="flex flex-wrap items-center gap-2 text-sm text-secondary">
                 <li>
                   <Link
-                    href={`/${locale}`}
+                    href="/"
                     className="hover:text-[var(--color-primary)] transition-colors"
                   >
                     {t.home}
@@ -481,7 +481,7 @@ export default async function DesignSystemPage({ params }: Props) {
                 <li>→</li>
                 <li>
                   <Link
-                    href={`/${locale}/submit`}
+                    href="/submit"
                     className="hover:text-[var(--color-primary)] transition-colors"
                   >
                     {t.submit}
@@ -577,10 +577,10 @@ export default async function DesignSystemPage({ params }: Props) {
           <h2>{t.utilityPatterns}</h2>
           <div className="card space-y-6">
             <div className="flex flex-wrap items-center gap-4 md:gap-6">
-              <Link href={`/${locale}/articles`} className="link-primary">
+              <Link href="/articles" className="link-primary">
                 {t.primaryLink}
               </Link>
-              <Link href={`/${locale}/articles`} className="link-secondary">
+              <Link href="/articles" className="link-secondary">
                 {t.secondaryLink}
               </Link>
             </div>
@@ -656,21 +656,21 @@ export default async function DesignSystemPage({ params }: Props) {
             <ToolCard
               title={t.toolCards[0].title}
               description={t.toolCards[0].description}
-              href={`/${locale}/articles`}
+              href="/articles"
               icon="📚"
               category={t.toolCards[0].category}
             />
             <ToolCard
               title={t.toolCards[1].title}
               description={t.toolCards[1].description}
-              href={`/${locale}/articles`}
+              href="/articles"
               icon="🗞️"
               category={t.toolCards[1].category}
             />
             <ToolCard
               title={t.toolCards[2].title}
               description={t.toolCards[2].description}
-              href={`/${locale}/articles`}
+              href="/articles"
               icon="✨"
               category={t.toolCards[2].category}
             />

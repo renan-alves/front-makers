@@ -16,12 +16,22 @@ import { useEffect } from 'react';
  * - footer: in the footer
  * 
  * How to use:
- * 1. Add your AdSense ID in the layout.tsx script
- * 2. Create slots in Google AdSense
- * 3. Replace the data-ad-slot below with your IDs
+ * 1. Set NEXT_PUBLIC_ADSENSE_ID (env var) with your publisher ID (ca-pub-...)
+ * 2. Create an ad unit per slot in the Google AdSense dashboard
+ * 3. Replace the placeholder values in SLOT_IDS below with the real ad unit IDs
  */
 
 type SlotType = 'hero' | 'article-list' | 'article-content' | 'article-bottom' | 'tool-end' | 'footer';
+
+// TODO: replace with the real ad unit IDs from your Google AdSense dashboard
+const SLOT_IDS: Record<SlotType, string> = {
+  hero: 'REPLACE_WITH_HERO_SLOT_ID',
+  'article-list': '5672659300',
+  'article-content': '3208333408',
+  'article-bottom': '9093029561',
+  'tool-end': 'REPLACE_WITH_TOOL_END_SLOT_ID',
+  footer: '4062250079',
+};
 
 interface AdBannerProps {
   slot: SlotType;
@@ -81,6 +91,7 @@ export default function AdBanner({ slot, className = '' }: AdBannerProps) {
   }, []);
 
   const config = slotConfigs[slot] || slotConfigs.hero;
+  const adsenseId = process.env.NEXT_PUBLIC_ADSENSE_ID;
 
   return (
     <div
@@ -90,9 +101,9 @@ export default function AdBanner({ slot, className = '' }: AdBannerProps) {
       {/* Google AdSense */}
       <ins
         className="adsbygoogle"
-        style={{ display: 'block', width: '100%' }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-        data-ad-slot={`slot-${slot}`}
+        style={config.layout ? { display: 'block', textAlign: 'center' } : { display: 'block', width: '100%' }}
+        data-ad-client={adsenseId}
+        data-ad-slot={SLOT_IDS[slot] || SLOT_IDS.hero}
         data-ad-format={config.format}
         data-full-width-responsive={config.responsive}
         {...(config.layout && { 'data-ad-layout': config.layout })}

@@ -57,74 +57,17 @@ export default function AccountConnectedPage({ params }: Props) {
 
     const stored = window.localStorage.getItem('frontmakersUser');
     if (!stored) {
-      window.localStorage.setItem('frontmakersRedirect', `/${locale}/account/connected`);
-      router.replace(`/${locale}/auth`);
+      window.localStorage.setItem('frontmakersRedirect', '/account');
+      router.replace('/auth');
       return;
     }
 
-    setIsLoading(false);
+    router.replace('/account');
   }, [locale, router]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-secondary">
-        <section className="section-padding">
-          <div className="container-grid">
-            <div className="card card-static">{t.loading}</div>
-          </div>
-        </section>
-      </div>
-    );
+    return null;
   }
 
-  return (
-    <div className="min-h-screen bg-secondary">
-      <section className="bg-primary border-b border-light section-padding">
-        <div className="container-grid">
-          <div className="max-w-4xl space-y-3">
-            <div className="text-sm text-secondary">
-              <Link href={`/${locale}/account`} className="hover:text-primary">
-                {t.breadcrumb}
-              </Link>{' '}
-              / {t.title}
-            </div>
-            <h1>{t.title}</h1>
-            <p className="text-lg text-secondary">
-              {t.subtitle}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-padding">
-        <div className="container-grid">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-6 items-start">
-            <div className="card card-static space-y-5">
-              <div>
-                <h2 className="text-xl font-bold">{t.sectionTitle}</h2>
-                <p className="text-sm text-secondary">{t.sectionBody}</p>
-              </div>
-              <div className="grid gap-3">
-                <SocialAuthButton provider="google" />
-                <SocialAuthButton provider="linkedin" />
-                <SocialAuthButton provider="github" />
-              </div>
-            </div>
-
-            <div className="card card-static space-y-4">
-              <h3 className="text-lg font-semibold">{t.sideTitle}</h3>
-              <ul className="space-y-3 text-sm text-secondary">
-                {t.sideItems.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-              <div className="rounded-lg border border-dashed border-light p-4 text-sm text-secondary">
-                {t.sideNote}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+  return null;
 }

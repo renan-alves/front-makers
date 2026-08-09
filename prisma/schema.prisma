@@ -37,23 +37,27 @@ model User {
 // Article Model
 // Main content model for published articles
 model Article {
-  id          String        @id @default(cuid())
-  title       String
-  slug        String        @unique
-  content     String        @db.Text
-  excerpt     String
-  coverImage  String?
-  locale      String        @default("en")
-  status      ArticleStatus @default(DRAFT)
-  category    String
-  readTime    Int           // Reading time in minutes
-  tags        String[]      // Array of tags
-  author      User          @relation(fields: [authorId], references: [id])
-  authorId    String
-  threads     Thread[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  publishedAt DateTime?
+  id               String           @id @default(cuid())
+  title            String
+  slug             String           @unique
+  content          String           @db.Text
+  excerpt          String
+  coverImage       String?
+  locale           String           @default("en")
+  status           SubmissionStatus @default(PENDENT)
+  category         String
+  readTime         Int              // Reading time in minutes
+  tags             String[]         // Array of tags
+  authorName       String?
+  authorEmail      String?
+  notes            String?
+  author           User             @relation(fields: [authorId], references: [id])
+  authorId         String
+  threads          Thread[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  publishedAt      DateTime?
+  reviewedAt       DateTime?
 
   @@index([slug])
   @@index([locale])
@@ -127,34 +131,8 @@ model ReplyVote {
   @@index([userId])
 }
 
-enum ArticleStatus {
-  DRAFT
-  PUBLISHED
-}
-
-// Article Submission Model
-// For community-submitted articles awaiting review
-model ArticleSubmission {
-  id          String           @id @default(cuid())
-  title       String
-  content     String           @db.Text
-  authorName  String
-  authorEmail String
-  locale      String           @default("en")
-  status      SubmissionStatus @default(PENDING)
-  category    String?
-  tags        String[]         @default([])
-  notes       String?          // Admin notes
-  createdAt   DateTime         @default(now())
-  reviewedAt  DateTime?
-
-  @@index([status])
-  @@index([authorEmail])
-  @@index([createdAt])
-}
-
 enum SubmissionStatus {
-  PENDING
+  PENDENT
   APPROVED
   REJECTED
 }

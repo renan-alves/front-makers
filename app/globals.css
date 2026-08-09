@@ -153,6 +153,10 @@ body {
            focus:ring-opacity-30 focus:border-transparent transition-all;
   }
 
+  .input:disabled {
+    @apply cursor-not-allowed opacity-80 bg-[var(--color-background-alt)] text-[var(--color-text-secondary)];
+  }
+
   /* Labels */
   .label {
     @apply block text-sm font-semibold text-[var(--color-text)] mb-2;

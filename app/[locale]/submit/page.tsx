@@ -1,7 +1,8 @@
 'use client';
 
-import { use, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { QuillEditor } from '@/components/ui/QuillEditor';
 
 /**
  * Submit Article Page
@@ -43,8 +44,10 @@ export default function SubmitPage({ params }: Props) {
           category: 'Categoria',
           selectCategory: 'Selecione uma categoria',
           tags: 'Tags (separadas por virgula)',
-          content: 'Conteudo do artigo (Markdown) *',
-          minChars: 'Minimo de 100 caracteres. Use Markdown para formatar.',
+          content: 'Conteudo do artigo (Texto rico) *',
+          minChars: 'Minimo de 100 caracteres. Use o editor para formatar.',
+          editorTitle: 'Modo de escrita',
+          editorHint: 'Use o editor visual para estruturar seu texto e o conteudo sera salvo com formatação.',
           submit: 'Enviar artigo',
           submitting: 'Enviando...',
           cancel: 'Cancelar',
@@ -54,25 +57,11 @@ export default function SubmitPage({ params }: Props) {
             title: 'ex: Tecnicas avancadas de CSS Grid para 2026',
             tags: 'css, grid, layout',
           },
-          sample: `# Introducao
-
-Seu conteudo aqui usando Markdown...
-
-## Exemplo de codigo
-
-\`\`\`css
-.container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-\`\`\`
-
-## Conclusao
-
-Finalize seu artigo...`,
+          sample: 'Comece escrevendo seu artigo aqui. Adicione títulos, listas, destaque e blocos de código para deixar o conteúdo mais claro.',
           errors: {
             submit: 'Falha ao enviar artigo',
             generic: 'Ocorreu um erro',
+            duplicateTags: 'Não é possível usar tags duplicadas.',
           },
         }
       : {
@@ -102,8 +91,10 @@ Finalize seu artigo...`,
           category: 'Category',
           selectCategory: 'Select a category',
           tags: 'Tags (comma-separated)',
-          content: 'Article Content (Markdown) *',
-          minChars: 'Minimum 100 characters. Use Markdown for formatting.',
+          content: 'Article Content *',
+          minChars: 'Minimum 100 characters. Use the editor to format your content.',
+          editorTitle: 'Writing mode',
+          editorHint: 'Use the rich editor to structure your writing and save your content with formatting.',
           submit: 'Submit Article',
           submitting: 'Submitting...',
           cancel: 'Cancel',
@@ -113,25 +104,11 @@ Finalize seu artigo...`,
             title: 'e.g., Advanced CSS Grid Techniques for 2026',
             tags: 'css, grid, layout',
           },
-          sample: `# Introduction
-
-Your article content here using Markdown formatting...
-
-## Code Example
-
-\`\`\`css
-.container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-\`\`\`
-
-## Conclusion
-
-Wrap up your article...`,
+          sample: 'Start writing your article here. Add headings, lists, emphasis, and code snippets to make the content clearer.',
           errors: {
             submit: 'Failed to submit article',
             generic: 'An error occurred',
+            duplicateTags: 'Duplicate tags are not allowed.',
           },
         };
   const [formData, setFormData] = useState({
@@ -142,23 +119,88 @@ Wrap up your article...`,
     category: '',
     tags: '',
   });
+  const [prefilledAuthor, setPrefilledAuthor] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const storedUser = window.localStorage.getItem('frontmakersUser');
+    if (!storedUser) {
+      return;
+    }
+
+    try {
+      const parsedUser = JSON.parse(storedUser) as { name?: string; email?: string };
+      const hasNameOrEmail = Boolean(parsedUser.name || parsedUser.email);
+      if (hasNameOrEmail) {
+        setPrefilledAuthor(true);
+      }
+      setFormData((current) => ({
+        ...current,
+        authorName: current.authorName || parsedUser.name || '',
+        authorEmail: current.authorEmail || parsedUser.email || '',
+      }));
+    } catch {
+      // Ignore malformed user data and keep the form empty.
+    }
+  }, []);
 
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [tagsError, setTagsError] = useState('');
+  const contentLength = formData.content.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').trim().length;
+
+  const tagsPreview = formData.tags
+    .split(',')
+    .map((tag) => tag.trim())
+    .filter(Boolean);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
+    const { name, value } = e.target;
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    if (name === 'tags') {
+      const normalizedTags = value
+        .split(',')
+        .map((tag) => tag.trim().toLowerCase())
+        .filter(Boolean);
+      const hasDuplicateTags = new Set(normalizedTags).size !== normalizedTags.length;
+      setTagsError(hasDuplicateTags ? t.errors.duplicateTags : '');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
     setErrorMessage('');
+
+    const normalizedTags = formData.tags
+      .split(',')
+      .map((tag) => tag.trim().toLowerCase())
+      .filter(Boolean);
+
+    if (!formData.category) {
+      setStatus('error');
+      setErrorMessage(t.errors.generic);
+      return;
+    }
+
+    const hasDuplicateTags = new Set(normalizedTags).size !== normalizedTags.length;
+
+    if (hasDuplicateTags) {
+      setStatus('error');
+      setTagsError(t.errors.duplicateTags);
+      setErrorMessage(t.errors.duplicateTags);
+      return;
+    }
 
     try {
       const response = await fetch('/api/submissions', {
@@ -168,7 +210,7 @@ Wrap up your article...`,
         },
         body: JSON.stringify({
           ...formData,
-          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+          tags: normalizedTags,
         }),
       });
 
@@ -204,7 +246,7 @@ Wrap up your article...`,
               {t.successBody}
             </p>
             <div className="flex gap-4 justify-center">
-              <Link href={`/${locale}`} className="btn-primary">
+              <Link href="/" className="btn-primary">
                 {t.successHome}
               </Link>
               <button
@@ -231,7 +273,7 @@ Wrap up your article...`,
               <ol className="flex items-center gap-2 text-sm text-secondary">
                 <li>
                   <Link
-                    href={`/${locale}`}
+                    href="/"
                     className="hover:text-[var(--color-primary)] transition-colors"
                   >
                     {t.breadcrumbHome}
@@ -288,6 +330,7 @@ Wrap up your article...`,
                     required
                     className="input w-full"
                     placeholder={t.placeholders.name}
+                    disabled={prefilledAuthor}
                   />
                 </div>
                 <div>
@@ -303,6 +346,7 @@ Wrap up your article...`,
                     required
                     className="input w-full"
                     placeholder={t.placeholders.email}
+                    disabled={prefilledAuthor}
                   />
                 </div>
               </div>
@@ -339,16 +383,18 @@ Wrap up your article...`,
                       value={formData.category}
                       onChange={handleChange}
                       className="input w-full"
+                      required
                     >
                       <option value="">{t.selectCategory}</option>
-                      <option value="CSS">CSS</option>
-                      <option value="JavaScript">JavaScript</option>
-                      <option value="TypeScript">TypeScript</option>
-                      <option value="React">React</option>
-                      <option value="Next.js">Next.js</option>
-                      <option value="Performance">Performance</option>
+                      <option value="Frontend">Frontend</option>
+                      <option value="Backend">Backend</option>
                       <option value="Design">Design</option>
-                      <option value="Tools">Tools</option>
+                      <option value="Productivity">Productivity</option>
+                      <option value="Career">Career</option>
+                      <option value="Opinion">Opinion</option>
+                      <option value="Tutorial">Tutorial</option>
+                      <option value="Case Study">Case Study</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
 
@@ -362,9 +408,25 @@ Wrap up your article...`,
                       name="tags"
                       value={formData.tags}
                       onChange={handleChange}
-                      className="input w-full"
+                      className={`input w-full ${tagsError ? 'border-red-500' : ''}`}
                       placeholder={t.placeholders.tags}
+                      aria-invalid={Boolean(tagsError)}
+                      aria-describedby="tags-error"
                     />
+                    {tagsError && (
+                      <p id="tags-error" className="mt-2 text-sm text-red-600">
+                        {tagsError}
+                      </p>
+                    )}
+                    {tagsPreview.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {tagsPreview.map((tag) => (
+                          <span key={tag} className="rounded-full border border-[var(--color-border)] bg-secondary px-3 py-1 text-sm text-primary">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -372,18 +434,29 @@ Wrap up your article...`,
                   <label htmlFor="content" className="block text-sm font-semibold mb-2">
                     {t.content}
                   </label>
-                  <textarea
-                    id="content"
-                    name="content"
-                    value={formData.content}
-                    onChange={handleChange}
-                    required
-                    rows={20}
-                    className="input w-full font-mono text-sm"
-                    placeholder={t.sample}
-                  />
-                  <p className="text-sm text-secondary mt-2">
-                    {t.minChars}
+                  <div className="mb-3 rounded-xl border border-light bg-primary p-3">
+                    <div className="flex flex-wrap items-center gap-2 text-sm">
+                      <span className="text-secondary font-medium">{t.editorTitle}</span>
+                    </div>
+                    <p className="mt-2 text-sm text-secondary">{t.editorHint}</p>
+                  </div>
+                  <div className="rounded-xl border border-light bg-primary p-3">
+                    <QuillEditor
+                      value={formData.content}
+                      onChange={(value: string) => setFormData({ ...formData, content: value })}
+                      placeholder={t.sample}
+                    />
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-sm">
+                    <p className="text-secondary">
+                      {t.minChars}
+                    </p>
+                    <span className={`font-semibold ${contentLength >= 100 ? 'text-[var(--color-primary)]' : 'text-[var(--color-error)]'}`}>
+                      {contentLength} characters
+                    </span>
+                  </div>
+                  <p className="mt-3 text-sm text-secondary">
+                    O texto será formatado diretamente no editor enquanto você digita.
                   </p>
                 </div>
               </div>
@@ -399,7 +472,7 @@ Wrap up your article...`,
                 {status === 'submitting' ? t.submitting : t.submit}
               </button>
               <Link
-                href={`/${locale}`}
+                href="/"
                 className="text-secondary hover:text-primary transition-colors"
               >
                 {t.cancel}

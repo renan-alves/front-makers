@@ -143,7 +143,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                 <ol className="flex items-center gap-2 text-sm text-secondary flex-wrap">
                   <li>
                     <Link
-                      href={`/${locale}`}
+                      href="/"
                       className="hover:text-[var(--color-primary)] transition-colors"
                     >
                       {t.home}
@@ -152,7 +152,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                   <li>→</li>
                   <li>
                     <Link
-                      href={`/${locale}/articles`}
+                      href="/articles"
                       className="hover:text-[var(--color-primary)] transition-colors"
                     >
                       {t.articles}
@@ -237,7 +237,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                     {article.tags.map((tag) => (
                       <Link
                         key={tag}
-                        href={`/${locale}/articles?tag=${tag}`}
+                        href={`/articles?tag=${tag}`}
                         className="px-3 py-1 bg-neutral-100 text-primary rounded-full text-sm hover:bg-neutral-200 transition-colors"
                       >
                         #{tag}
@@ -255,7 +255,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
 
                   <nav className="flex items-center gap-2 border-b border-light pb-3" aria-label="Article tabs">
                     <Link
-                      href={`/${locale}/articles/${article.slug}?tab=article`}
+                      href={`/articles/${article.slug}?tab=article`}
                       className={`px-4 py-2 text-sm font-semibold rounded-full border transition-colors ${
                         selectedTab === 'article'
                           ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
@@ -265,7 +265,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                       {t.articleTab}
                     </Link>
                     <Link
-                      href={`/${locale}/articles/${article.slug}?tab=discussions&sort=${selectedSort}`}
+                      href={`/articles/${article.slug}?tab=discussions&sort=${selectedSort}`}
                       className={`px-4 py-2 text-sm font-semibold rounded-full border transition-colors ${
                         selectedTab === 'discussions'
                           ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
@@ -286,7 +286,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                     <div className="space-y-6">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <Link
-                          href={`/${locale}/articles/${article.slug}?tab=discussions&new=1`}
+                          href={`/articles/${article.slug}?tab=discussions&new=1`}
                           className="btn-primary text-center"
                         >
                           {t.newDiscussion}
@@ -295,7 +295,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                         <div className="flex flex-wrap items-center gap-2 text-sm">
                           <span className="text-secondary mr-1">{t.sortBy}</span>
                           <Link
-                            href={`/${locale}/articles/${article.slug}?tab=discussions&sort=relevant`}
+                            href={`/articles/${article.slug}?tab=discussions&sort=relevant`}
                             className={`px-3 py-1.5 rounded-full border ${
                               selectedSort === 'relevant'
                                 ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
@@ -305,7 +305,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                             {t.sortRelevant}
                           </Link>
                           <Link
-                            href={`/${locale}/articles/${article.slug}?tab=discussions&sort=recent`}
+                            href={`/articles/${article.slug}?tab=discussions&sort=recent`}
                             className={`px-3 py-1.5 rounded-full border ${
                               selectedSort === 'recent'
                                 ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
@@ -315,7 +315,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                             {t.sortRecent}
                           </Link>
                           <Link
-                            href={`/${locale}/articles/${article.slug}?tab=discussions&sort=top`}
+                            href={`/articles/${article.slug}?tab=discussions&sort=top`}
                             className={`px-3 py-1.5 rounded-full border ${
                               selectedSort === 'top'
                                 ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
@@ -336,7 +336,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                           {threads.map((thread) => (
                             <li key={thread.id}>
                               <Link
-                                href={`/${locale}/t/${thread.id}`}
+                                href={`/t/${thread.id}`}
                                 className="card block hover:border-[var(--color-primary)]"
                               >
                                 <div className="space-y-3">
@@ -384,7 +384,7 @@ export default async function ArticlePage({ params, searchParams }: Props) {
                     {relatedArticles.map((related) => (
                       <Link
                         key={related.slug}
-                        href={`/${locale}/articles/${related.slug}`}
+                        href={`/articles/${related.slug}`}
                         className="card group"
                       >
                         <div className="flex items-start justify-between gap-4">

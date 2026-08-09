@@ -4,93 +4,64 @@ import AdBanner from '../ads/AdBanner';
 
 /**
  * Footer Component
- * Footer with links, copyright and ad space
+ * Footer with links, copyright and ad space.
  */
 interface FooterProps {
-  locale: Locale;
+  locale?: string;
 }
 
-export default function Footer({ locale }: FooterProps) {
+export default function Footer({ locale: _locale }: FooterProps) {
   const currentYear = new Date().getFullYear();
-  const t =
-    locale === 'pt-br'
-      ? {
-          about:
-            'Plataforma completa com artigos e recursos para desenvolvedores frontend modernos.',
-          navigation: 'Navegacao',
-          articles: 'Artigos',
-          submit: 'Enviar artigo',
-          home: 'Inicio',
-          rights: 'Todos os direitos reservados.',
-        }
-      : {
-          about:
-            'Complete platform with articles and resources for modern frontend developers.',
-          navigation: 'Navigation',
-          articles: 'Articles',
-          submit: 'Submit Article',
-          home: 'Home',
-          rights: 'All rights reserved.',
-        };
 
   return (
     <footer className="bg-secondary border-t border-light mt-24">
-      {/* Ad area in footer */}
       <div className="container-grid py-8">
         <AdBanner slot="footer" />
       </div>
 
       <div className="container-grid py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* About */}
           <div>
-            <h3 className="text-lg font-bold text-primary mb-4">
-              Frontmakers
-            </h3>
+            <h3 className="text-lg font-bold text-primary mb-4">Frontmakers</h3>
             <p className="text-secondary text-sm leading-relaxed">
-              {t.about}
+              Complete platform with articles and resources for modern frontend developers.
             </p>
           </div>
 
-          {/* Main Links */}
           <div>
-            <h3 className="text-lg font-bold text-primary mb-4">
-              {t.navigation}
-            </h3>
+            <h3 className="text-lg font-bold text-primary mb-4">Navigation</h3>
             <ul className="space-y-2">
               <li>
                 <Link
-                  href={`/${locale}/articles`}
+                  href="/articles"
                   className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
                 >
-                  {t.articles}
+                  Articles
                 </Link>
               </li>
               <li>
                 <Link
-                  href={`/${locale}/submit`}
+                  href="/submit"
                   className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
                 >
-                  {t.submit}
+                  Submit Article
                 </Link>
               </li>
               <li>
                 <Link
-                  href={`/${locale}`}
+                  href="/"
                   className="text-secondary hover:text-[var(--color-primary)] transition-colors text-sm"
                 >
-                  {t.home}
+                  Home
                 </Link>
               </li>
             </ul>
           </div>
-
         </div>
 
-        {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-light text-center">
           <p className="text-secondary text-sm">
-            © {currentYear} Frontmakers. {t.rights}
+            © {currentYear} Frontmakers. All rights reserved.
           </p>
         </div>
       </div>

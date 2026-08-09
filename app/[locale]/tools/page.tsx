@@ -57,7 +57,7 @@ export default async function ToolsPage({ params }: Props) {
         <div className="max-w-3xl mx-auto card card-static text-center space-y-4">
           <h2 className="text-2xl font-bold">{t.soonTitle}</h2>
           <p className="text-secondary">{t.soonBody}</p>
-          <Link href={`/${locale}/articles`} className="btn-secondary">
+          <Link href="/articles" className="btn-secondary">
             {t.cta}
           </Link>
         </div>

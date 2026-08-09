@@ -97,7 +97,7 @@ export default async function ArticlesPage({ params }: Props) {
                     </div>
 
                     {/* Content */}
-                    <Link href={`/${locale}/articles/${article.slug}`}>
+                    <Link href={`/articles/${article.slug}`}>
                       <h2 className="text-2xl font-bold mb-3 group-hover:text-[var(--color-primary)] transition-colors">
                         {article.title}
                       </h2>
@@ -119,7 +119,7 @@ export default async function ArticlesPage({ params }: Props) {
 
                     {/* Read More Link */}
                     <Link
-                      href={`/${locale}/articles/${article.slug}`}
+                      href={`/articles/${article.slug}`}
                       className="text-[var(--color-primary)] font-semibold flex items-center gap-2 hover:text-[var(--color-primary-dark)] transition-colors"
                     >
                       {t.readMore}

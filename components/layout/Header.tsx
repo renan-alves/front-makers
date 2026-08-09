@@ -1,40 +1,29 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import {
-  getLocalizedUrl,
-  removeLocaleFromPath,
-  localeConfig,
-  locales,
-} from '@/lib/i18n';
 import type { Locale } from '@/lib/i18n';
-import { en, ptBR } from '@/locales';
+import { en } from '@/locales';
 import Skeleton from '@/components/ui/Skeleton';
-import FlagBrazil from '@/components/icons/flags/FlagBrazil';
-import FlagUK from '@/components/icons/flags/FlagUK';
 import ChevronDown from '@/components/icons/ChevronDown';
 
 /**
  * Header Component
- * Main site navigation with logo and links to main sections
- * Logo: "FRONT" in red, "MAKERS" in black/white
+ * Main site navigation with links to the main sections.
  */
 interface HeaderProps {
-  locale: Locale;
+  locale?: string;
 }
 
-export default function Header({ locale }: HeaderProps) {
+export default function Header({ locale: _locale }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthReady, setIsAuthReady] = useState(false);
-  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const languageMenuRef = useRef<HTMLDivElement | null>(null);
 
   const handleToggleMenu = () => {
     setIsMenuOpen((previousValue) => !previousValue);
@@ -64,34 +53,6 @@ export default function Header({ locale }: HeaderProps) {
     };
   }, []);
 
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (!languageMenuRef.current) {
-        return;
-      }
-
-      if (!languageMenuRef.current.contains(event.target as Node)) {
-        setIsLanguageOpen(false);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsLanguageOpen(false);
-      }
-    };
-
-    if (isLanguageOpen) {
-      window.addEventListener('mousedown', handleOutsideClick);
-      window.addEventListener('keydown', handleEscape);
-    }
-
-    return () => {
-      window.removeEventListener('mousedown', handleOutsideClick);
-      window.removeEventListener('keydown', handleEscape);
-    };
-  }, [isLanguageOpen]);
-
   const handleAuthClick = () => {
     if (typeof window === 'undefined') {
       return;
@@ -110,35 +71,10 @@ export default function Header({ locale }: HeaderProps) {
       window.dispatchEvent(new Event('frontmakers-auth'));
     }
     handleCloseMenu();
-    router.replace(`/${locale}/auth`);
+    router.replace('/auth');
   };
 
-  const t = locale === 'pt-br' ? ptBR : en;
-
-  const localeOptions = useMemo(
-    () => locales.map((key) => localeConfig[key]),
-    []
-  );
-
-  const handleLocaleChange = (nextLocale: Locale) => {
-    if (!pathname || nextLocale === locale) {
-      return;
-    }
-
-    const basePath = removeLocaleFromPath(pathname);
-    const nextPath = getLocalizedUrl(basePath, nextLocale);
-    router.push(nextPath);
-    handleCloseMenu();
-    setIsLanguageOpen(false);
-  };
-
-  const renderLocaleFlag = (currentLocale: Locale) => {
-    if (currentLocale === 'pt-br') {
-      return <FlagBrazil size={18} />;
-    }
-
-    return <FlagUK size={18} />;
-  };
+  const t = en;
 
   return (
     <header className="sticky top-0 z-50 bg-primary border-b border-light backdrop-blur-sm bg-opacity-95">
@@ -159,32 +95,28 @@ export default function Header({ locale }: HeaderProps) {
           </button>
 
           <div className="flex items-center flex-1">
-            <Link
-              href={`/${locale}`}
-              onClick={handleCloseMenu}
-              className="flex items-center"
-            >
+            <Link href="/" onClick={handleCloseMenu} className="flex items-center">
               <Image
-                src="/frontmakers-logo.webp"
+                src="/frontmakers-logo@2x.webp"
                 alt="FrontMakers Logo"
-                width={140}
-                height={48}
+                width={210}
+                height={73}
+                sizes="(max-width: 768px) 42vw, 210px"
                 priority
                 className="h-16 w-auto object-contain"
               />
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 text-base">
             <Link
-              href={`/${locale}/articles`}
+              href="/articles"
               className="text-secondary hover:text-primary transition-colors"
             >
               {t.nav.articles}
             </Link>
             <Link
-              href={`/${locale}/submit`}
+              href="/submit"
               className="text-secondary hover:text-primary font-medium transition-colors"
             >
               {t.nav.submit}
@@ -202,22 +134,16 @@ export default function Header({ locale }: HeaderProps) {
                 <div className="absolute right-0 top-full w-56 rounded-2xl border border-light bg-primary shadow-lg opacity-0 pointer-events-none transition group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto">
                   <div className="flex flex-col p-2 text-sm">
                     <Link
-                      href={`/${locale}/account/personal`}
+                      href="/account/personal"
                       className="rounded-lg px-3 py-2 text-secondary hover:text-primary hover:bg-secondary transition-colors"
                     >
                       {t.nav.personalData}
                     </Link>
                     <Link
-                      href={`/${locale}/account/articles`}
+                      href="/account/articles"
                       className="rounded-lg px-3 py-2 text-secondary hover:text-primary hover:bg-secondary transition-colors"
                     >
                       {t.nav.yourArticles}
-                    </Link>
-                    <Link
-                      href={`/${locale}/account/connected`}
-                      className="rounded-lg px-3 py-2 text-secondary hover:text-primary hover:bg-secondary transition-colors"
-                    >
-                      {t.nav.connectedAccounts}
                     </Link>
                     <div className="my-2 h-px bg-light" />
                     <button
@@ -232,7 +158,7 @@ export default function Header({ locale }: HeaderProps) {
               </div>
             ) : isAuthReady ? (
               <Link
-                href={`/${locale}/auth`}
+                href="/auth"
                 onClick={handleAuthClick}
                 className="text-secondary hover:text-primary font-semibold transition-colors"
               >
@@ -241,45 +167,6 @@ export default function Header({ locale }: HeaderProps) {
             ) : (
               <Skeleton className="h-5 w-24 rounded-full" />
             )}
-            <div ref={languageMenuRef} className="relative">
-              <button
-                type="button"
-                aria-label="Select language"
-                aria-haspopup="menu"
-                aria-expanded={isLanguageOpen}
-                onClick={() => setIsLanguageOpen((previous) => !previous)}
-                className="inline-flex items-center gap-2 rounded-full border border-light px-3 py-1 text-sm font-semibold text-primary transition-colors hover:text-primary"
-              >
-                {renderLocaleFlag(locale)}
-                <span>{locale.toUpperCase()}</span>
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform ${
-                    isLanguageOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              <div
-                className={`absolute right-0 top-full mt-2 w-32 rounded-2xl border border-light bg-primary shadow-lg transition ${
-                  isLanguageOpen
-                    ? 'opacity-100 pointer-events-auto'
-                    : 'opacity-0 pointer-events-none'
-                }`}
-              >
-                <div className="flex flex-col p-1 text-sm">
-                  {localeOptions.map((option) => (
-                    <button
-                      key={option.code}
-                      type="button"
-                      onClick={() => handleLocaleChange(option.code as Locale)}
-                      className="flex items-center gap-2 rounded-lg px-3 py-2 text-left text-secondary hover:text-primary hover:bg-secondary transition-colors"
-                    >
-                      {renderLocaleFlag(option.code as Locale)}
-                      <span>{option.code.toUpperCase()}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -300,16 +187,13 @@ export default function Header({ locale }: HeaderProps) {
               className="h-full w-[82%] max-w-sm bg-primary border-r border-light shadow-lg duration-300 ease-out data-[closed]:-translate-x-full"
             >
               <div className="h-16 px-4 flex items-center justify-between border-b border-light">
-                <Link
-                  href={`/${locale}`}
-                  onClick={handleCloseMenu}
-                  className="flex items-center"
-                >
+                <Link href="/" onClick={handleCloseMenu} className="flex items-center">
                   <Image
-                    src="/frontmakers-logo.png"
+                    src="/frontmakers-logo@2x.webp"
                     alt="FrontMakers Logo"
-                    width={180}
-                    height={60}
+                    width={170}
+                    height={59}
+                    sizes="170px"
                     priority
                     className="h-10 w-auto object-contain"
                   />
@@ -328,14 +212,14 @@ export default function Header({ locale }: HeaderProps) {
 
               <div className="p-4 flex flex-col gap-4 text-base">
                 <Link
-                  href={`/${locale}/articles`}
+                  href="/articles"
                   onClick={handleCloseMenu}
                   className="text-secondary hover:text-primary transition-colors"
                 >
                   {t.nav.articles}
                 </Link>
                 <Link
-                  href={`/${locale}/submit`}
+                  href="/submit"
                   onClick={handleCloseMenu}
                   className="text-secondary hover:text-primary font-medium transition-colors"
                 >
@@ -344,7 +228,7 @@ export default function Header({ locale }: HeaderProps) {
                 {isLoggedIn ? (
                   <div className="space-y-2">
                     <Link
-                      href={`/${locale}/account`}
+                      href="/account"
                       onClick={handleCloseMenu}
                       className="text-secondary hover:text-primary font-semibold transition-colors"
                     >
@@ -352,25 +236,18 @@ export default function Header({ locale }: HeaderProps) {
                     </Link>
                     <div className="flex flex-col gap-2 pl-2">
                       <Link
-                        href={`/${locale}/account/personal`}
+                        href="/account/personal"
                         onClick={handleCloseMenu}
                         className="text-secondary hover:text-primary transition-colors"
                       >
                         {t.nav.personalData}
                       </Link>
                       <Link
-                        href={`/${locale}/account/articles`}
+                        href="/account/articles"
                         onClick={handleCloseMenu}
                         className="text-secondary hover:text-primary transition-colors"
                       >
                         {t.nav.yourArticles}
-                      </Link>
-                      <Link
-                        href={`/${locale}/account/connected`}
-                        onClick={handleCloseMenu}
-                        className="text-secondary hover:text-primary transition-colors"
-                      >
-                        {t.nav.connectedAccounts}
                       </Link>
                       <div className="my-2 h-px bg-light" />
                       <button
@@ -384,7 +261,7 @@ export default function Header({ locale }: HeaderProps) {
                   </div>
                 ) : isAuthReady ? (
                   <Link
-                    href={`/${locale}/auth`}
+                    href="/auth"
                     onClick={handleAuthClick}
                     className="text-secondary hover:text-primary font-semibold transition-colors"
                   >
@@ -393,24 +270,6 @@ export default function Header({ locale }: HeaderProps) {
                 ) : (
                   <Skeleton className="h-5 w-24 rounded-full" />
                 )}
-                <div className="mt-2">
-                  <label className="text-xs uppercase tracking-wide text-secondary">
-                    {t.nav.language}
-                  </label>
-                  <div className="mt-2 flex flex-col gap-2">
-                    {localeOptions.map((option) => (
-                      <button
-                        key={option.code}
-                        type="button"
-                        onClick={() => handleLocaleChange(option.code as Locale)}
-                        className="flex items-center gap-2 rounded-lg border border-light px-3 py-2 text-left text-sm font-semibold text-primary transition-colors hover:text-primary"
-                      >
-                        {renderLocaleFlag(option.code as Locale)}
-                        <span>{option.code.toUpperCase()}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
             </DialogPanel>
           </div>

@@ -26,28 +26,20 @@ export default function AccountOverviewPage({ params }: Props) {
           articlesBody:
             'Revise artigos publicados e rascunhos, envie mudancas ou exclua.',
           articlesCta: 'Gerenciar artigos',
-          connectedTitle: 'Contas conectadas',
-          connectedBody:
-            'Conecte perfis sociais para login mais rapido e visibilidade.',
-          connectedCta: 'Gerenciar conexoes',
           loading: 'Carregando conta...',
         }
       : {
           title: 'Your account',
           subtitle:
-            'Manage your profile, articles, and connected accounts from one place.',
+            'Manage your profile and articles from one place.',
           personalTitle: 'Personal data',
           personalBody:
             'Update your profile, avatar, and password, or delete your account.',
           personalCta: 'Manage personal data',
           articlesTitle: 'Your articles',
           articlesBody:
-            'Review your published and draft articles, submit changes, or delete.',
+            'Review your articles, submit changes, or delete.',
           articlesCta: 'Manage articles',
-          connectedTitle: 'Connected accounts',
-          connectedBody:
-            'Link social profiles for faster sign-in and profile visibility.',
-          connectedCta: 'Manage connections',
           loading: 'Loading account...',
         };
 
@@ -58,8 +50,8 @@ export default function AccountOverviewPage({ params }: Props) {
 
     const stored = window.localStorage.getItem('frontmakersUser');
     if (!stored) {
-      window.localStorage.setItem('frontmakersRedirect', `/${locale}/account`);
-      router.replace(`/${locale}/auth`);
+      window.localStorage.setItem('frontmakersRedirect', '/account');
+      router.replace('/auth');
       return;
     }
 
@@ -93,13 +85,13 @@ export default function AccountOverviewPage({ params }: Props) {
 
       <section className="section-padding">
         <div className="container-grid">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="card card-static flex flex-col gap-4">
               <div>
                 <h2 className="text-xl font-bold">{t.personalTitle}</h2>
                 <p className="text-sm text-secondary">{t.personalBody}</p>
               </div>
-              <Button type="button" onClick={() => router.push(`/${locale}/account/personal`)}>
+              <Button type="button" onClick={() => router.push('/account/personal')}>
                 {t.personalCta}
               </Button>
             </div>
@@ -111,22 +103,9 @@ export default function AccountOverviewPage({ params }: Props) {
               </div>
               <Button
                 type="button"
-                onClick={() => router.push(`/${locale}/account/articles`)}
+                onClick={() => router.push('/account/articles')}
               >
                 {t.articlesCta}
-              </Button>
-            </div>
-
-            <div className="card card-static flex flex-col gap-4">
-              <div>
-                <h2 className="text-xl font-bold">{t.connectedTitle}</h2>
-                <p className="text-sm text-secondary">{t.connectedBody}</p>
-              </div>
-              <Button
-                type="button"
-                onClick={() => router.push(`/${locale}/account/connected`)}
-              >
-                {t.connectedCta}
               </Button>
             </div>
           </div>

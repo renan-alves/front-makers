@@ -31,7 +31,7 @@ export default async function PxRemToolComingSoon({ params }: Props) {
         <div className="container-grid">
           <div className="max-w-3xl">
             <div className="text-sm text-secondary">
-              <Link href={`/${locale}/tools`} className="hover:text-primary">
+              <Link href="/tools" className="hover:text-primary">
                 {t.tools}
               </Link>{' '}
               / {t.title}
@@ -48,7 +48,7 @@ export default async function PxRemToolComingSoon({ params }: Props) {
         <div className="max-w-2xl mx-auto card card-static text-center space-y-4">
           <h2 className="text-2xl font-bold">{t.soonTitle}</h2>
           <p className="text-secondary">{t.soonBody}</p>
-          <Link href={`/${locale}/articles`} className="btn-secondary">
+          <Link href="/articles" className="btn-secondary">
             {t.cta}
           </Link>
         </div>

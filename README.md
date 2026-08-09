@@ -243,11 +243,12 @@ O projeto está otimizado para SEO com:
 
 ## 💰 Google AdSense
 
-O site está preparado para Google AdSense:
+O site já está com a integração ligada — só falta configurar a conta:
 
-1. **Configure seu ID:** Edite \`app/layout.tsx\` e adicione seu ID do AdSense
-2. **Crie os slots:** No painel do Google AdSense
-3. **Atualize os slots:** Edite \`components/ads/AdBanner.tsx\` com seus IDs
+1. **Crie/valide a conta AdSense** para o domínio de produção e aguarde aprovação do Google.
+2. **Configure o ID do editor:** defina \`NEXT_PUBLIC_ADSENSE_ID\` (ex. \`ca-pub-1234567890123456\`) na env do projeto — o script em \`app/layout.tsx\` só carrega quando essa variável existe.
+3. **Crie um bloco de anúncio por slot** no painel do AdSense (hero, article-list, article-content, article-bottom, tool-end, footer).
+4. **Atualize os IDs reais:** edite o objeto \`SLOT_IDS\` em \`components/ads/AdBanner.tsx\`, substituindo os placeholders \`REPLACE_WITH_*_SLOT_ID\` pelo ID de cada bloco criado.
 
 ### Posições dos Anúncios
 
